@@ -1,21 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import TopBar from "./TopBar";
-import ExampleSunset from "../assets/example_sunset.jpg";
 import { Color } from "../constants/constants";
-import { ApiResponse, invokeLambda, SunsetItem } from "../util/api";
+import { SunsetItem } from "../util/api";
 
 const Caption = styled.div`
-  padding: 1rem;
   text-align: center;
   max-width: 400px;
+  flex: 0;
 `;
 
 const Panel = styled.div`
   flex: 1;
+  height: 100vh;
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr;
 
   max-width: 600px;
   background-color: ${Color.BACKGROUND};
@@ -23,19 +24,22 @@ const Panel = styled.div`
 `;
 
 const SunsetContent = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  display: grid;
+  place-items: center;
+  grid-template-rows: 1fr min-content;
+  grid-template-columns: 1fr;
+  box-sizing: border-box;
 
-  flex: 1;
-
-  padding: 1rem;
+  padding: 24px;
   text-align: center;
 `;
 
 const SunsetImage = styled.img`
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  flex: 1;
   border-radius: 10px;
 `;
 
@@ -45,20 +49,17 @@ interface ISunsetPanel {
 
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response: any = await invokeLambda();
-  //     if (response.items) {
-  //       setSunsetData(response.items[0]);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error:", err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  // unix to string date formatter
+  const formatTimestamp = (timestamp: number) => {
+    console.log(timestamp);
+    const date = new Date(timestamp * 1000);
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+    return formatter.format(date).toLowerCase();
+  };
 
   return (
     <Panel>
@@ -66,13 +67,14 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
       <SunsetContent>
         {props.sunset == null ? null : (
           <>
-            <SunsetImage src={props.sunset.sunset_url.S} />
+            <SunsetImage src={props.sunset.sunsetUrl} />
             <Caption>
               <p>
-                {props.sunset.user_name.S}'s sunset •{" "}
-                {props.sunset.sunset_location_name.S} • august 4, 2024
+                {props.sunset.userName}'s sunset •{" "}
+                {props.sunset.sunsetLocationName} •{" "}
+                {formatTimestamp(props.sunset.sunsetTimestamp)}
               </p>
-              <p>{props.sunset.sunset_caption.S}</p>
+              <p>{props.sunset.sunsetCaption}</p>
             </Caption>
           </>
         )}

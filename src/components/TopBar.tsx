@@ -30,8 +30,8 @@ const TopBar: React.FC = () => {
           sunset diaries
         </Row>
       </Logo>
-      <Link>about</Link>
-      <Link>share your sunset</Link>
+      {/* <Link>about</Link>
+      <Link>share your sunset</Link> */}
     </Bar>
   );
 };

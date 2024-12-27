@@ -66,6 +66,7 @@ export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
         sunsetUrl: item.sunset_url.S ?? "",
         userName: item.user_name.S ?? "",
       }));
+      sunsets.sort((a, b) => b.sunsetTimestamp - a.sunsetTimestamp);
       return sunsets;
     } catch (error) {
       console.error("Error parsing response:", error);

@@ -2,6 +2,7 @@ import { styled } from "styled-components";
 import { ReactComponent as SemiCircle } from "../assets/logo.svg";
 import { Color } from "../constants/constants";
 import { Row } from "./common/Row";
+import { useNavigate } from "react-router-dom";
 
 const Bar = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const Bar = styled.div`
 const Logo = styled.div`
   flex-grow: 1;
   justify-content: start;
+  cursor: pointer;
 `;
 
 const Link = styled.a`
@@ -21,17 +23,18 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-const TopBar: React.FC = () => {
+function TopBar(props: {sharePage?: boolean}) {
+  const navigate = useNavigate();
+  
   return (
     <Bar>
-      <Logo>
+      <Logo onClick={() => navigate("/")}>
         <Row gap={8}>
           <SemiCircle fill={Color.WARM_GREY} width={24} />
           sunset diaries
         </Row>
       </Logo>
-      {/* <Link>about</Link>
-      <Link>share your sunset</Link> */}
+      {props.sharePage ? null : <Link onClick={() => navigate("/new")}>share your sunset</Link>}
     </Bar>
   );
 };

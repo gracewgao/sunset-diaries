@@ -3,6 +3,7 @@ import styled from "styled-components";
 import TopBar from "./TopBar";
 import { Color } from "../constants/constants";
 import { SunsetItem } from "../util/api";
+import { useWindowSize } from "../util/windowSize";
 
 const Caption = styled.div`
   text-align: center;
@@ -14,13 +15,15 @@ const Panel = styled.div`
   flex: 1;
   height: 100vh;
 
+  box-shadow: 0 1px 0 1px ${Color.BACKGROUND};
+  z-index: 1;
+
   display: grid;
   grid-template-rows: min-content 1fr;
   grid-template-columns: 1fr;
 
   max-width: 600px;
   background-color: ${Color.BACKGROUND};
-  color: ${Color.WARM_GREY};
 `;
 
 const SunsetContent = styled.div`
@@ -48,6 +51,7 @@ interface ISunsetPanel {
 }
 
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
+  const { width, height, isMobile } = useWindowSize();
 
   // unix to string date formatter
   const formatTimestamp = (timestamp: number) => {
@@ -70,11 +74,11 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
             <SunsetImage src={props.sunset.sunsetUrl} />
             <Caption>
               <p>
-                {props.sunset.userName}'s sunset •{" "}
-                {props.sunset.sunsetLocationName} •{" "}
+                {props.sunset.userName ? `${props.sunset.userName}'s sunset • ` : ""}
+                {props.sunset.sunsetLocationName ? ` ${props.sunset.sunsetLocationName} • ` : ""}
                 {formatTimestamp(props.sunset.sunsetTimestamp)}
               </p>
-              <p>{props.sunset.sunsetCaption}</p>
+              {isMobile ? null : <p><i>{props.sunset.sunsetCaption}</i></p>}
             </Caption>
           </>
         )}

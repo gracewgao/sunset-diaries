@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SunsetForm from "./components/SunsetForm";
 import SunsetDiaries from "./components/SunsetDiaries";
 import { Color } from "./constants/constants";
-import Loader from "./components/Loader";
+import About from "./components/About";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -15,15 +15,19 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     background-color: ${Color.BACKGROUND};
     color: ${Color.WARM_GREY};
+    font-size: 1rem;
   }
 
   html {
     font-size: clamp(14px, 2vw, 14px);
   }
-  
-  body {
-    font-size: 1rem;
-  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
 
 .active {
     opacity: 1;
@@ -36,7 +40,6 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-
   return (
     <>
       <GlobalStyle />
@@ -44,6 +47,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SunsetDiaries />} />
           <Route path="/new" element={<SunsetForm />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </BrowserRouter>
     </>

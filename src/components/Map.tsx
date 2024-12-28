@@ -68,8 +68,7 @@ const GlowMarker = styled(CircleMarker)`
 `;
 
 const RegularMarker = styled(CircleMarker)`
-  filter: drop-shadow(0 0 7px ${Color.ORANGE})
-    drop-shadow(0 0 10px ${Color.ORANGE});
+  filter: drop-shadow(0 0 10px ${Color.ORANGE});
   fill-opacity: 1;
   fill: ${Color.ORANGE};
   stroke: none;

@@ -13,23 +13,27 @@ const Caption = styled.div`
 
 const Panel = styled.div`
   flex: 1;
-  height: 100vh;
+  height: 100%;
 
+  background-color: ${Color.BACKGROUND};
   box-shadow: 0 1px 0 1px ${Color.BACKGROUND};
   z-index: 1;
 
   display: grid;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content minmax(0, 1fr);
   grid-template-columns: 1fr;
-
   max-width: 600px;
-  background-color: ${Color.BACKGROUND};
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    max-height: 60%;
+  }
 `;
 
 const SunsetContent = styled.div`
   display: grid;
   place-items: center;
-  grid-template-rows: 1fr min-content;
+  grid-template-rows: minmax(0, 1fr) min-content;
   grid-template-columns: 1fr;
   box-sizing: border-box;
 
@@ -44,6 +48,10 @@ const SunsetImage = styled.img`
   height: auto;
   flex: 1;
   border-radius: 10px;
+`;
+
+const Metadata = styled.p`
+
 `;
 
 interface ISunsetPanel {
@@ -73,12 +81,20 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
           <>
             <SunsetImage src={props.sunset.sunsetUrl} />
             <Caption>
-              <p>
-                {props.sunset.userName ? `${props.sunset.userName}'s sunset • ` : ""}
-                {props.sunset.sunsetLocationName ? ` ${props.sunset.sunsetLocationName} • ` : ""}
+              <Metadata>
+                {props.sunset.userName
+                  ? `${props.sunset.userName}'s sunset • `
+                  : ""}
+                {props.sunset.sunsetLocationName
+                  ? ` ${props.sunset.sunsetLocationName} • `
+                  : ""}
                 {formatTimestamp(props.sunset.sunsetTimestamp)}
-              </p>
-              {isMobile ? null : <p><i>{props.sunset.sunsetCaption}</i></p>}
+              </Metadata>
+              {isMobile ? null : (
+                <p>
+                  <i>{props.sunset.sunsetCaption}</i>
+                </p>
+              )}
             </Caption>
           </>
         )}

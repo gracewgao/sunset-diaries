@@ -6,127 +6,11 @@ import { styled } from "styled-components";
 import Spacer from "./common/Spacer";
 import TopBar from "./TopBar";
 import { IoAdd, IoImage } from "react-icons/io5";
-import { GoCheckCircleFill, GoCircle } from "react-icons/go";
-import { BsCheckCircleFill, BsCircleFill, BsCircle } from "react-icons/bs";
+import { BsCheckCircleFill, BsCircle } from "react-icons/bs";
 
 import ExifReader from "exifreader";
-
-const Container = styled.div`
-  width: auto;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 2rem;
-`;
-
-const GlowingText = styled.div`
-  font-size: 2rem;
-  color: ${Color.YELLOW};
-  text-shadow: 0 0 10px ${Color.ORANGE};
-`;
-
-const Button = styled.button<{ disabled: boolean }>`
-  background-color: ${Color.BACKGROUND};
-  color: ${Color.WARM_GREY};
-  font-family: "Inclusive Sans";
-  border: none;
-  padding: 0;
-  display: inline-block;
-  cursor: pointer;
-
-  font-size: 1.5rem;
-
-  ${(props) =>
-    !props.disabled &&
-    `
-    color: ${Color.YELLOW};
-    text-shadow: 0 0 8px ${Color.ORANGE};
-
-    &:hover {
-        color: ${Color.ORANGE};
-        text-shadow: 0 0 12px ${Color.ORANGE};
-    }
-    `}
-`;
-
-const UploadSunset = styled.div`
-  color: ${Color.WARM_GREY};
-  border: 1px dashed ${Color.WARM_GREY};
-  border-radius: 8px;
-  position: relative;
-
-  input[type="file" i] {
-    cursor: pointer;
-    opacity: 0;
-    height: 150px;
-    width: 100%;
-  }
-`;
-
-const UploadDisplay = styled.div`
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-// todo: the date picker icon lookin a little ugly
-const TextInput = styled.input`
-  padding: 10px 16px;
-  width: 100%;
-  box-sizing: border-box;
-  background: ${Color.MED_GREY};
-  color: ${Color.WHITE};
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: "Inclusive Sans";
-`;
-
-const TextArea = styled.textarea`
-  padding: 10px 16px;
-  width: 100%;
-  box-sizing: border-box;
-  background: ${Color.MED_GREY};
-  color: ${Color.WHITE};
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: "Inclusive Sans";
-`;
-
-const Label = styled.span`
-  color: ${Color.WHITE};
-  font-size: 1rem;
-`;
-
-const Required = styled.span`
-  color: ${Color.ORANGE};
-  font-size: 1rem;
-`;
-
-const AutofillCheck = styled.label`
-  color: ${Color.WARM_GREY};
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  gap: 0.5rem;
-`;
-
-const Checkbox = styled.input`
-  margin-right: 0.5rem;
-  display: none;
-`;
-
-function TextLabel(props: { required?: boolean; children: React.ReactNode }) {
-  return (
-    <>
-      <Label>{props.children}</Label>
-      {props.required ? <Required>{" *"}</Required> : null}
-    </>
-  );
-}
+import { AutofillCheck, Button, Checkbox, Container, GlowingText, TextArea, TextInput, UploadDisplay, UploadSunset } from "./common/common";
+import TextLabel from "./common/TextLabel";
 
 const SunsetForm: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -151,14 +35,14 @@ const SunsetForm: React.FC = () => {
       return false;
     }
     if (sunsetTimestamp === 0) {
-        setMessage("missing sunset timestamp!");
+      setMessage("missing sunset timestamp!");
       return false;
     } else if (sunsetTimestamp > Math.floor(Date.now() / 1000)) {
-        setMessage("sunset timestamp is in the future!");
+      setMessage("sunset timestamp is in the future!");
       return false;
     }
     if (sunsetLocationCoords === null) {
-        setMessage("please select location on the map!");
+      setMessage("please select location on the map!");
       return false;
     }
     setMessage("looking good!");

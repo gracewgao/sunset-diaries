@@ -67,7 +67,7 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
 
   return (
     <Panel>
-      <TopBar />
+      <TopBar homepage />
       <SunsetContent>
         {props.sunset == null ? null : (
           <>

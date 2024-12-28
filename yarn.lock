@@ -2514,6 +2514,11 @@
     "@webassemblyjs/ast" "1.14.1"
     "@xtuc/long" "4.2.2"
 
+"@xmldom/xmldom@^0.9.4":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.9.6.tgz#3eaefb585c1f920e06fb35e6dcb8d505445621c0"
+  integrity sha512-Su4xcxR0CPGwlDHNmVP09fqET9YxbyDXHaSob6JlBH7L6reTYaeim6zbk9o08UarO0L5GTRo3uzl0D+9lSxmvw==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -4629,6 +4634,13 @@ execa@^5.0.0:
     onetime "^5.1.2"
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
+
+exifreader@^4.26.0:
+  version "4.26.0"
+  resolved "https://registry.yarnpkg.com/exifreader/-/exifreader-4.26.0.tgz#7207acd1320cf3c5c71a8628b5710ae0d8d04582"
+  integrity sha512-nNN9B0oaXTOpArdnIdJBAro2Sa620m7wMjMA5Xy1rcua0EYHVjzGKM5syBOWDqIG2Qay6Pes/5FOdj65hvZ9Vw==
+  optionalDependencies:
+    "@xmldom/xmldom" "^0.9.4"
 
 exit@^0.1.2:
   version "0.1.2"

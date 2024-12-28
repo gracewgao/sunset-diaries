@@ -23,9 +23,9 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-function TopBar(props: {sharePage?: boolean}) {
+function TopBar(props: { homepage?: boolean }) {
   const navigate = useNavigate();
-  
+
   return (
     <Bar>
       <Logo onClick={() => navigate("/")}>
@@ -34,9 +34,14 @@ function TopBar(props: {sharePage?: boolean}) {
           sunset diaries
         </Row>
       </Logo>
-      {props.sharePage ? null : <Link onClick={() => navigate("/new")}>share your sunset</Link>}
+      {props.homepage ? (
+        <>
+          <Link onClick={() => navigate("/about")}>about</Link>
+          <Link onClick={() => navigate("/new")}>share yours</Link>
+        </>
+      ) : null}
     </Bar>
   );
-};
+}
 
 export default TopBar;

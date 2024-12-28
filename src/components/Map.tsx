@@ -27,7 +27,7 @@ const Container = styled.div`
   }
 
   .leaflet-control-zoom a:hover {
-    background-color: ${Color.BACKGROUND};
+    background-color: ${Color.MED_GREY};
     color: ${Color.WARM_GREY};
   }
 

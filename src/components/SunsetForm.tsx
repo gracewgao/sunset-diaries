@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SelectLocation, { SunsetLocationCoords } from "./SelectLocation";
-import { Color } from "../constants/constants";
+import { CLOUDINARY_URL, Color, UPLOAD_PRESET } from "../constants/constants";
 import { styled } from "styled-components";
 import Spacer from "./common/Spacer";
 import TopBar from "./TopBar";
 import { IoAdd, IoImage } from "react-icons/io5";
+import { GoCheckCircleFill, GoCircle } from "react-icons/go";
+import { BsCheckCircleFill, BsCircleFill, BsCircle } from "react-icons/bs";
+
+import ExifReader from "exifreader";
 
 const Container = styled.div`
   width: auto;
@@ -21,13 +25,7 @@ const GlowingText = styled.div`
   text-shadow: 0 0 10px ${Color.ORANGE};
 `;
 
-const OrangeGlowingText = styled.div`
-  font-size: 1.5rem;
-  color: ${Color.YELLOW};
-  text-shadow: 0 0 8px ${Color.ORANGE};
-`;
-
-const Button = styled.button`
+const Button = styled.button<{ disabled: boolean }>`
   background-color: ${Color.BACKGROUND};
   color: ${Color.WARM_GREY};
   font-family: "Inclusive Sans";
@@ -35,6 +33,20 @@ const Button = styled.button`
   padding: 0;
   display: inline-block;
   cursor: pointer;
+
+  font-size: 1.5rem;
+
+  ${(props) =>
+    !props.disabled &&
+    `
+    color: ${Color.YELLOW};
+    text-shadow: 0 0 8px ${Color.ORANGE};
+
+    &:hover {
+        color: ${Color.ORANGE};
+        text-shadow: 0 0 12px ${Color.ORANGE};
+    }
+    `}
 `;
 
 const UploadSunset = styled.div`
@@ -84,16 +96,30 @@ const TextArea = styled.textarea`
   font-family: "Inclusive Sans";
 `;
 
-function TextLabel(props: { required?: boolean; children: React.ReactNode }) {
-  const Label = styled.span`
-    color: ${Color.WHITE};
-    font-size: 1rem;
-  `;
-  const Required = styled.span`
-    color: ${Color.ORANGE};
-    font-size: 1rem;
-  `;
+const Label = styled.span`
+  color: ${Color.WHITE};
+  font-size: 1rem;
+`;
 
+const Required = styled.span`
+  color: ${Color.ORANGE};
+  font-size: 1rem;
+`;
+
+const AutofillCheck = styled.label`
+  color: ${Color.WARM_GREY};
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+`;
+
+const Checkbox = styled.input`
+  margin-right: 0.5rem;
+  display: none;
+`;
+
+function TextLabel(props: { required?: boolean; children: React.ReactNode }) {
   return (
     <>
       <Label>{props.children}</Label>
@@ -105,23 +131,79 @@ function TextLabel(props: { required?: boolean; children: React.ReactNode }) {
 const SunsetForm: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [sunsetUrl, setSunsetUrl] = useState<string>("");
-  const [sunsetCaption, setSunsetCaption] = useState("");
-  const [sunsetLocationName, setSunsetLocationName] = useState("");
+  const [sunsetCaption, setSunsetCaption] = useState<string>("");
+  const [sunsetLocationName, setSunsetLocationName] = useState<string>("");
   const [sunsetLocationCoords, setSunsetLocationCoords] =
     useState<SunsetLocationCoords | null>(null);
-  const [sunsetTimestamp, setSunsetTimestamp] = useState(0);
-  const [timestamp, setTimestamp] = useState("");
-  const [userName, setUserName] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [sunsetTimestamp, setSunsetTimestamp] = useState<number>(0);
+  const [timestamp, setTimestamp] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
 
-  const CLOUDINARY_URL =
-    "https://api.cloudinary.com/v1_1/dmw7198oi/image/upload";
-  const UPLOAD_PRESET = "sunset-diaries";
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [autofill, setAutofill] = useState<boolean>(true);
+  const [complete, setComplete] = useState<boolean>(false);
+
+  const [message, setMessage] = useState<string>("");
+
+  const validateInput = () => {
+    if (image === null) {
+      setMessage("please select an image first!");
+      return false;
+    }
+    if (sunsetTimestamp === 0) {
+        setMessage("missing sunset timestamp!");
+      return false;
+    } else if (sunsetTimestamp > Math.floor(Date.now() / 1000)) {
+        setMessage("sunset timestamp is in the future!");
+      return false;
+    }
+    if (sunsetLocationCoords === null) {
+        setMessage("please select location on the map!");
+      return false;
+    }
+    setMessage("looking good!");
+    return true;
+  };
+
+  const toUnixTimestamp = (date: string) =>
+    Math.floor(new Date(date).getTime() / 1000);
+
+  const handleAutofill = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAutofill(e.target.checked);
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+      setImage(selectedFile);
+      if (autofill) {
+        fillExifData(selectedFile);
+      }
     }
+  };
+
+  const fillExifData = async (file: File) => {
+    const tags = await ExifReader.load(file);
+
+    // sunset timestamp
+    const imageDate = tags["DateTimeOriginal"]!!.description;
+    const isoDate = imageDate.replace(/^(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3");
+    setTimestamp(isoDate);
+    setSunsetTimestamp(toUnixTimestamp(isoDate));
+
+    // sunset location
+    const latRef = tags["GPSLatitudeRef"]!!.description;
+    const lngRef = tags["GPSLongitudeRef"]!!.description;
+    var lat =
+      parseFloat(tags["GPSLatitude"]!!.description) *
+      (latRef === "North latitude" ? 1 : -1);
+    var lng =
+      parseFloat(tags["GPSLongitude"]!!.description) *
+      (lngRef === "East longitude" ? 1 : -1);
+
+    console.log(lat, lng);
+    console.log(tags);
+    setSunsetLocationCoords({ lat: lat, lng: lng });
   };
 
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -134,8 +216,7 @@ const SunsetForm: React.FC = () => {
 
   const handleTimestampChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTimestamp(e.target.value);
-    const unixTimestamp = Math.floor(new Date(e.target.value).getTime() / 1000);
-    setSunsetTimestamp(unixTimestamp);
+    setSunsetTimestamp(toUnixTimestamp(e.target.value));
   };
 
   const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,21 +232,26 @@ const SunsetForm: React.FC = () => {
   const handleImageUpload = async () => {
     setSubmitted(true);
 
-    if (!image) {
-      console.error("please select an image first!");
+    if (!complete) {
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", image);
+    formData.append("file", image!!);
     formData.append("upload_preset", UPLOAD_PRESET);
+    // todo: signed upload
+    // formData.append("transformation", "c_fit,h_150,w_150");
 
     try {
       const response = await axios.post(CLOUDINARY_URL, formData);
       setSunsetUrl(response.data.secure_url);
       console.log("image uploaded!");
     } catch (error) {
+      setMessage(
+        "oops! something went wrong uploading your image, please try again..."
+      );
       console.error("error uploading image:", error);
+      return;
     }
   };
 
@@ -189,14 +275,18 @@ const SunsetForm: React.FC = () => {
         },
       });
       console.log("response:", response.data);
+      setMessage("thanks! your sunset was delivered safely<3");
     } catch (error) {
       console.error("error uploading sunset:", error);
+      setMessage("hmm something went wrong, please try again...");
     }
 
     resetForm();
   };
 
   const resetForm = () => {
+    setImage(null);
+    setAutofill(true);
     setSunsetUrl("");
     setSunsetCaption("");
     setSunsetLocationName("");
@@ -205,11 +295,16 @@ const SunsetForm: React.FC = () => {
     setTimestamp("");
     setUserName("");
     setSubmitted(false);
+    setComplete(false);
   };
+
+  useEffect(() => {
+    setComplete(validateInput());
+  }, [image, sunsetTimestamp, sunsetLocationCoords]);
 
   return (
     <>
-      <TopBar sharePage />
+      <TopBar />
       <Container>
         <GlowingText>share your sunset</GlowingText>
         <p>welcome to the sunset diaries club B-)</p>
@@ -235,6 +330,16 @@ const SunsetForm: React.FC = () => {
           </UploadDisplay>
           <input type="file" accept="image/jpeg" onChange={handleImageChange} />
         </UploadSunset>
+        <Spacer height={1} />
+        <AutofillCheck>
+          <Checkbox
+            type="checkbox"
+            checked={autofill}
+            onChange={handleAutofill}
+          />
+          {autofill ? <BsCheckCircleFill size={18} /> : <BsCircle size={18} />}
+          autofill from image
+        </AutofillCheck>
         <Spacer height={1.5} />
 
         <TextLabel required>when was your sunset?</TextLabel>
@@ -258,6 +363,7 @@ const SunsetForm: React.FC = () => {
         <TextLabel>location description</TextLabel>
         <Spacer height={0.5} />
         <TextInput
+          value={sunsetLocationName}
           type="text"
           placeholder="ocean beach"
           onChange={handleLocationNameChange}
@@ -277,16 +383,17 @@ const SunsetForm: React.FC = () => {
         <TextLabel>what's your name?</TextLabel>
         <Spacer height={0.5} />
         <TextInput
+          value={userName}
           type="text"
           placeholder="olivia"
           onChange={handleUserNameChange}
         />
         <Spacer height={1.5} />
-        <Button onClick={handleImageUpload}>
-          <OrangeGlowingText>submit</OrangeGlowingText>
+        <Button onClick={handleImageUpload} disabled={!complete}>
+          submit
         </Button>
+        <p>{message}</p>
         <Spacer height={2} />
-        <p>{"made with <3 by grace"}</p>
       </Container>
     </>
   );

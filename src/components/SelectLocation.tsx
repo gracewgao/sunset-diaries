@@ -29,7 +29,6 @@ const Container = styled.div`
   width: 100%;
 
   .leaflet-control-zoom {
-    background-color: ${Color.BACKGROUND};
     border: none;
     box-shadow: none;
   }
@@ -42,7 +41,7 @@ const Container = styled.div`
   }
 
   .leaflet-control-zoom a:hover {
-    background-color: ${Color.BACKGROUND};
+    background-color: ${Color.MED_GREY};
     color: ${Color.WARM_GREY};
   }
 
@@ -73,7 +72,6 @@ const Container = styled.div`
   }
 
   .leaflet-bar {
-    background-color: ${Color.MED_GREY}; !important;
     border: none !important;
     color: ${Color.WHITE} !important;
     box-shadow: none !important;
@@ -165,7 +163,8 @@ const SearchControl: React.FC<{
   setPosition: React.Dispatch<
     React.SetStateAction<SunsetLocationCoords | null>
   >;
-}> = ({ setPosition }) => {
+  position: SunsetLocationCoords | null;
+}> = ({ setPosition, position }) => {
   const map = useMap();
 
   const handleSearchResult = (result: any) => {
@@ -177,6 +176,12 @@ const SearchControl: React.FC<{
       map.setView([result.location.y, result.location.x], map.getZoom());
     }
   };
+
+  useEffect(() => {
+    if (position) {
+      map.setView([position.lat, position.lng], map.getZoom());
+    }
+  }, [position]);
 
   useEffect(() => {
     const provider = new OpenStreetMapProvider();
@@ -215,7 +220,7 @@ const SelectLocation: React.FC<{
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution="&copy; OpenStreetMap contributors &copy; CARTO"
         />
-        <SearchControl setPosition={setCoords} />
+        <SearchControl setPosition={setCoords} position={coords} />
         <LocationMarker setPosition={setCoords} />
         {coords && coords.lat && coords.lng && (
           <GlowMarker radius={5} center={[coords.lat, coords.lng]} />

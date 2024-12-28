@@ -1,5 +1,5 @@
 const API_URL =
-  "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/getAllSunsets";
+  "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/sunsets/all";
 
 interface DynamoDBAttribute<T> {
   S?: string; // string type in DynamoDB
@@ -66,6 +66,7 @@ export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
         sunsetUrl: item.sunset_url.S ?? "",
         userName: item.user_name.S ?? "",
       }));
+      sunsets.sort((a, b) => b.sunsetTimestamp - a.sunsetTimestamp);
       return sunsets;
     } catch (error) {
       console.error("Error parsing response:", error);

@@ -63,7 +63,6 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
 
   // unix to string date formatter
   const formatTimestamp = (timestamp: number) => {
-    console.log(timestamp);
     const date = new Date(timestamp * 1000);
     const formatter = new Intl.DateTimeFormat("en-US", {
       month: "long",

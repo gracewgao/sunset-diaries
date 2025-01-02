@@ -38,8 +38,14 @@ const SunsetForm: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const [response, setResponse] = useState<string>("");
   const [accessCode, setAccessCode] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [newForm, setNewForm] = useState<boolean>(true);
 
   const validateInput = () => {
+    if (newForm) {
+      setNewForm(false);
+      return false;
+    }
     setResponse("");
     if (image === null) {
       setMessage("please select an image first!");
@@ -85,24 +91,25 @@ const SunsetForm: React.FC = () => {
     const tags = await ExifReader.load(file);
 
     // sunset timestamp
-    const imageDate = tags["DateTimeOriginal"]!!.description;
-    const isoDate = imageDate.replace(/^(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3");
-    setTimestamp(isoDate);
-    setSunsetTimestamp(toUnixTimestamp(isoDate));
+    if (tags["DateTimeOriginal"]) {
+      const imageDate = tags["DateTimeOriginal"]!!.description;
+      const isoDate = imageDate.replace(/^(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3");
+      setTimestamp(isoDate);
+      setSunsetTimestamp(toUnixTimestamp(isoDate));
+    }
 
     // sunset location
-    const latRef = tags["GPSLatitudeRef"]!!.description;
-    const lngRef = tags["GPSLongitudeRef"]!!.description;
-    var lat =
-      parseFloat(tags["GPSLatitude"]!!.description) *
-      (latRef === "North latitude" ? 1 : -1);
-    var lng =
-      parseFloat(tags["GPSLongitude"]!!.description) *
-      (lngRef === "East longitude" ? 1 : -1);
-
-    console.log(lat, lng);
-    console.log(tags);
-    setSunsetLocationCoords({ lat: lat, lng: lng });
+    if (tags["GPSLatitude"] && tags["GPSLongitude"]) {
+      const latRef = tags["GPSLatitudeRef"]!!.description;
+      const lngRef = tags["GPSLongitudeRef"]!!.description;
+      var lat =
+        parseFloat(tags["GPSLatitude"]!!.description) *
+        (latRef === "North latitude" ? 1 : -1);
+      var lng =
+        parseFloat(tags["GPSLongitude"]!!.description) *
+        (lngRef === "East longitude" ? 1 : -1);
+      setSunsetLocationCoords({ lat: lat, lng: lng });
+    }
   };
 
   const handleCaptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -126,9 +133,6 @@ const SunsetForm: React.FC = () => {
     setAccessCode(e.target.value);
   };
 
-  // todo: signed upload
-  // formData.append("transformation", "c_fit,h_150,w_150");
-
   const convertBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -149,9 +153,9 @@ const SunsetForm: React.FC = () => {
       return;
     }
 
-    const imageBase64 = await convertBase64(image!!);
-    console.log("image base64:", imageBase64);
+    setLoading(true);
 
+    const imageBase64 = await convertBase64(image!!);
     const payload = {
       sunset_caption: validator.escape(sunsetCaption),
       sunset_location_coords: sunsetLocationCoords,
@@ -168,13 +172,13 @@ const SunsetForm: React.FC = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("response:", response.data);
       resetForm();
       setResponse("thanks! your sunset was delivered safely<3");
     } catch (error) {
       console.error("error uploading sunset:", error);
       setResponse("hmm something went wrong, please try again...");
     }
+    setLoading(false);
   };
 
   const resetForm = () => {
@@ -185,8 +189,7 @@ const SunsetForm: React.FC = () => {
     setSunsetLocationCoords(null);
     setSunsetTimestamp(0);
     setTimestamp("");
-    setUserName("");
-    setComplete(false);
+    setNewForm(true);
   };
 
   useEffect(() => {
@@ -276,7 +279,11 @@ const SunsetForm: React.FC = () => {
         <Spacer height={1.5} />
         <TextLabel required>access code</TextLabel>
         <Spacer height={0.25} />
-        posting is currently limited, please reach out to <TextLink href="mailto:gracewgao@gmail.com">gracewgao@gmail.com</TextLink> for the code!
+        posting is currently limited, please reach out to{" "}
+        <TextLink href="mailto:gracewgao@gmail.com">
+          gracewgao@gmail.com
+        </TextLink>{" "}
+        for the code!
         <Spacer height={0.5} />
         <TextInput
           value={accessCode}
@@ -285,8 +292,8 @@ const SunsetForm: React.FC = () => {
           onChange={handleAccessCodeChange}
         />
         <Spacer height={1.5} />
-        <Button onClick={handleSubmit} disabled={!complete}>
-          submit
+        <Button onClick={handleSubmit} disabled={!complete} loading={loading}>
+          {loading ? "sending..." : "submit"}
         </Button>
         <p>{message}</p>
         <p>{response}</p>

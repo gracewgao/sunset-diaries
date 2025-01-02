@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { Color } from "../../constants/constants";
 
-export const Button = styled.button<{ disabled?: boolean }>`
+export const Button = styled.button<{ disabled?: boolean; loading?: boolean }>`
   background-color: ${Color.BACKGROUND};
   color: ${Color.WARM_GREY};
   font-family: "Inclusive Sans";
@@ -22,6 +22,26 @@ export const Button = styled.button<{ disabled?: boolean }>`
         color: ${Color.ORANGE};
         text-shadow: 0 0 12px ${Color.ORANGE};
     }
+    `}
+
+  ${(props) =>
+    props.loading &&
+    `
+    color: ${Color.ORANGE};
+    animation: pulse-glow 3s ease-in-out infinite;
+
+    @keyframes pulse-glow {
+    0% {
+      text-shadow: 0 0 4px ${Color.ORANGE};
+    }
+    50% {
+      color: ${Color.YELLOW};
+      text-shadow: 0 0 8px ${Color.ORANGE};
+    }
+    100% {
+      text-shadow: 0 0 4px ${Color.ORANGE};
+    }
+  }
     `}
 `;
 

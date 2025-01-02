@@ -76,7 +76,7 @@ const RegularMarker = styled(CircleMarker)`
 
 interface IMap {
   sunsets: SunsetItem[];
-  onMarkerClick: (sunset: SunsetItem) => void;
+  onMarkerClick: (sunsetIndex: number) => void;
   selectedSunset?: SunsetItem;
 }
 
@@ -100,8 +100,8 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
   };
 
   useEffect(() => {
-    if (props.sunsets.length > 0) {
-      const loc = props.sunsets[0].sunsetLocationCoords;
+    if (props.sunsets.length > 0 && props.selectedSunset) {
+      const loc = props.sunsets[props.selectedSunset.index].sunsetLocationCoords;
       if (loc.lat && loc.lng) {
         setCenter([loc.lat, loc.lng]);
       } else {
@@ -121,7 +121,7 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
         }
       }
     }
-  }, [props.sunsets]);
+  }, [props.sunsets, props.selectedSunset]);
 
   const bounds: LatLngBoundsExpression = [
     [-90, -180],
@@ -153,7 +153,7 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
                 radius={5}
                 eventHandlers={{
                   click: () => {
-                    props.onMarkerClick(sunset);
+                    props.onMarkerClick(sunset.index);
                     setCenter([
                       sunset.sunsetLocationCoords.lat,
                       sunset.sunsetLocationCoords.lng,
@@ -171,7 +171,7 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
                 radius={5}
                 eventHandlers={{
                   click: () => {
-                    props.onMarkerClick(sunset);
+                    props.onMarkerClick(sunset.index);
                     setCenter([
                       sunset.sunsetLocationCoords.lat,
                       sunset.sunsetLocationCoords.lng,

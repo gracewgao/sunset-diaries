@@ -9,6 +9,7 @@ interface ISpacer {
 const StyledSpacer = styled.div<ISpacer>`
   width: ${(props) => props.width ?? 0}${(props) => (props.isFixed ? "px" : "rem")};
   height: ${(props) => props.height ?? 0}${(props) => (props.isFixed ? "px" : "rem")};
+  display: ${(props) => props.height ? "block" : "inline-block"};
 `;
 
 function Spacer(props: ISpacer) {

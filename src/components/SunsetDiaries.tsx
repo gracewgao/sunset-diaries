@@ -22,6 +22,7 @@ const Row = styled.div`
 function SunsetDiaries() {
   const [sunsets, setSunsets] = useState<SunsetItem[]>();
   const [selectedSunset, setSelectedSunset] = useState<SunsetItem>();
+  const [sunsetIndex, setSunsetIndex] = useState(0);
 
   const fetchData = async () => {
     try {
@@ -33,7 +34,6 @@ function SunsetDiaries() {
         response.forEach((item: SunsetItem) => {
           map.set(item.sunsetId, item);
         });
-        setSelectedSunset(response[0]);
       }
     } catch (err) {
       console.error("Error:", err);
@@ -56,6 +56,19 @@ function SunsetDiaries() {
     }, 3000);
   }, []);
 
+  useEffect(() => {
+    if (sunsetIndex < 0) {
+      setSunsetIndex(0);
+    }
+    if (sunsets && sunsetIndex > sunsets.length - 1) {
+      setSunsetIndex(sunsets.length - 1);
+    }
+
+    if (sunsets && sunsets.length > 0) {
+      setSelectedSunset(sunsets[sunsetIndex]);
+    }
+  }, [sunsetIndex, sunsets]);
+
   document.onreadystatechange = () => {
     setLoaded(document.readyState === "complete");
   };
@@ -65,10 +78,13 @@ function SunsetDiaries() {
       <Loader className={loaded && time ? "inactive" : "active"} />
       <Page>
         <Row>
-          <SunsetPanel sunset={selectedSunset} />
+          <SunsetPanel
+            sunset={selectedSunset}
+            setSunsetIndex={setSunsetIndex}
+          />
           <SunsetMap
             sunsets={sunsets ?? []}
-            onMarkerClick={setSelectedSunset}
+            onMarkerClick={setSunsetIndex}
             selectedSunset={selectedSunset}
           />
         </Row>

@@ -4,6 +4,9 @@ import TopBar from "./TopBar";
 import { Color } from "../constants/constants";
 import { SunsetItem } from "../util/api";
 import { useWindowSize } from "../util/windowSize";
+import { IoArrowForward, IoArrowBack } from "react-icons/io5";
+import Spacer from "./common/Spacer";
+import { TextLink } from "./common/common";
 
 const Caption = styled.div`
   text-align: center;
@@ -50,12 +53,24 @@ const SunsetImage = styled.img`
   border-radius: 10px;
 `;
 
-const Metadata = styled.p`
+const Metadata = styled.p``;
 
+const Arrow = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: ${Color.WARM_GREY};
+
+  &:hover {
+    color: ${Color.ORANGE};
+    -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
+    filter: drop-shadow(0 0 4px ${Color.ORANGE});
+  }
 `;
 
 interface ISunsetPanel {
   sunset?: SunsetItem;
+  setSunsetIndex: (sunsetIndex: number) => void;
 }
 
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
@@ -80,6 +95,11 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
           <>
             <SunsetImage src={props.sunset.sunsetUrl} />
             <Caption>
+              {isMobile ? null : (
+                <p>
+                  <i>{props.sunset.sunsetCaption}</i>
+                </p>
+              )}
               <Metadata>
                 {props.sunset.userName
                   ? `${props.sunset.userName}'s sunset • `
@@ -89,11 +109,23 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
                   : ""}
                 {formatTimestamp(props.sunset.sunsetTimestamp)}
               </Metadata>
-              {isMobile ? null : (
-                <p>
-                  <i>{props.sunset.sunsetCaption}</i>
-                </p>
-              )}
+              <Arrow
+                onClick={() => {
+                  if (props.sunset)
+                    props.setSunsetIndex(props.sunset.index - 1);
+                }}
+              >
+                <IoArrowBack size={18} />
+              </Arrow>
+              <Spacer width={1} />
+              <Arrow
+                onClick={() => {
+                  if (props.sunset)
+                    props.setSunsetIndex(props.sunset.index + 1);
+                }}
+              >
+                <IoArrowForward size={18} />
+              </Arrow>
             </Caption>
           </>
         )}

@@ -31,12 +31,13 @@ export interface Location {
 // friendly interface for sunset item
 export interface SunsetItem {
   sunsetCaption: string;
-  sunsetId: string
+  sunsetId: string;
   sunsetLocationCoords: Location;
   sunsetLocationName: string;
   sunsetTimestamp: number;
   sunsetUrl: string;
   userName: string;
+  index: number;
 }
 
 export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
@@ -65,8 +66,14 @@ export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
         sunsetTimestamp: parseInt(item.sunset_timestamp.N!!, 10),
         sunsetUrl: item.sunset_url.S ?? "",
         userName: item.user_name.S ?? "",
+        index: -1, // assign after sorting
       }));
-      sunsets.sort((a, b) => b.sunsetTimestamp - a.sunsetTimestamp);
+      sunsets.sort(
+        (a, b) => a.sunsetLocationCoords.lng - b.sunsetLocationCoords.lng
+      );
+      sunsets.forEach((item, index) => {
+        item.index = index;
+      });
       return sunsets;
     } catch (error) {
       console.error("Error parsing response:", error);

@@ -7,5 +7,4 @@ export enum Color {
   WHITE = "#E9E2DB",
 }
 
-export const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dmw7198oi/image/upload";
-export const UPLOAD_PRESET = "sunset-diaries";
+export const API_URL = "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/sunsets/new";

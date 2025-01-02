@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SunsetForm from "./components/SunsetForm";

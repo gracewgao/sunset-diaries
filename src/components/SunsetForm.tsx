@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SelectLocation, { SunsetLocationCoords } from "./SelectLocation";
-import { CLOUDINARY_URL, Color, UPLOAD_PRESET } from "../constants/constants";
-import { styled } from "styled-components";
+import { API_URL } from "../constants/constants";
 import Spacer from "./common/Spacer";
 import TopBar from "./TopBar";
 import { IoAdd, IoImage } from "react-icons/io5";
 import { BsCheckCircleFill, BsCircle } from "react-icons/bs";
 
 import ExifReader from "exifreader";
-import { AutofillCheck, Button, Checkbox, Container, GlowingText, TextArea, TextInput, UploadDisplay, UploadSunset } from "./common/common";
+import {
+  AutofillCheck,
+  Button,
+  Checkbox,
+  Container,
+  GlowingText,
+  TextArea,
+  TextInput,
+  TextLink,
+  UploadDisplay,
+  UploadSunset,
+} from "./common/common";
 import TextLabel from "./common/TextLabel";
+import validator from "validator";
 
 const SunsetForm: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
-  const [sunsetUrl, setSunsetUrl] = useState<string>("");
   const [sunsetCaption, setSunsetCaption] = useState<string>("");
   const [sunsetLocationName, setSunsetLocationName] = useState<string>("");
   const [sunsetLocationCoords, setSunsetLocationCoords] =
@@ -22,14 +32,15 @@ const SunsetForm: React.FC = () => {
   const [sunsetTimestamp, setSunsetTimestamp] = useState<number>(0);
   const [timestamp, setTimestamp] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [autofill, setAutofill] = useState<boolean>(true);
-  const [complete, setComplete] = useState<boolean>(false);
 
+  const [complete, setComplete] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const [response, setResponse] = useState<string>("");
+  const [accessCode, setAccessCode] = useState<string>("");
 
   const validateInput = () => {
+    setResponse("");
     if (image === null) {
       setMessage("please select an image first!");
       return false;
@@ -45,7 +56,11 @@ const SunsetForm: React.FC = () => {
       setMessage("please select location on the map!");
       return false;
     }
-    setMessage("looking good!");
+    if (accessCode === "") {
+      setMessage("access code is required!");
+      return false;
+    }
+    setMessage("");
     return true;
   };
 
@@ -107,49 +122,44 @@ const SunsetForm: React.FC = () => {
     setUserName(e.target.value);
   };
 
-  useEffect(() => {
-    if (sunsetUrl != "" && submitted) {
-      handleSubmit();
-    }
-  }, [sunsetUrl]);
+  const handleAccessCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAccessCode(e.target.value);
+  };
 
-  const handleImageUpload = async () => {
-    setSubmitted(true);
+  // todo: signed upload
+  // formData.append("transformation", "c_fit,h_150,w_150");
 
+  const convertBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleSubmit = async () => {
     if (!complete) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", image!!);
-    formData.append("upload_preset", UPLOAD_PRESET);
-    // todo: signed upload
-    // formData.append("transformation", "c_fit,h_150,w_150");
+    const imageBase64 = await convertBase64(image!!);
+    console.log("image base64:", imageBase64);
 
-    try {
-      const response = await axios.post(CLOUDINARY_URL, formData);
-      setSunsetUrl(response.data.secure_url);
-      console.log("image uploaded!");
-    } catch (error) {
-      setMessage(
-        "oops! something went wrong uploading your image, please try again..."
-      );
-      console.error("error uploading image:", error);
-      return;
-    }
-  };
-
-  const API_URL =
-    "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/sunsets/new";
-
-  const handleSubmit = async () => {
     const payload = {
-      sunset_url: sunsetUrl,
-      sunset_caption: sunsetCaption,
+      sunset_caption: validator.escape(sunsetCaption),
       sunset_location_coords: sunsetLocationCoords,
-      sunset_location_name: sunsetLocationName,
+      sunset_location_name: validator.escape(sunsetLocationName),
       sunset_timestamp: sunsetTimestamp,
-      user_name: userName,
+      user_name: validator.escape(userName),
+      access_code: validator.escape(accessCode),
+      sunset_image: imageBase64,
     };
 
     try {
@@ -159,32 +169,29 @@ const SunsetForm: React.FC = () => {
         },
       });
       console.log("response:", response.data);
-      setMessage("thanks! your sunset was delivered safely<3");
+      resetForm();
+      setResponse("thanks! your sunset was delivered safely<3");
     } catch (error) {
       console.error("error uploading sunset:", error);
-      setMessage("hmm something went wrong, please try again...");
+      setResponse("hmm something went wrong, please try again...");
     }
-
-    resetForm();
   };
 
   const resetForm = () => {
     setImage(null);
     setAutofill(true);
-    setSunsetUrl("");
     setSunsetCaption("");
     setSunsetLocationName("");
     setSunsetLocationCoords(null);
     setSunsetTimestamp(0);
     setTimestamp("");
     setUserName("");
-    setSubmitted(false);
     setComplete(false);
   };
 
   useEffect(() => {
     setComplete(validateInput());
-  }, [image, sunsetTimestamp, sunsetLocationCoords]);
+  }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode]);
 
   return (
     <>
@@ -193,7 +200,6 @@ const SunsetForm: React.FC = () => {
         <GlowingText>share your sunset</GlowingText>
         <p>welcome to the sunset diaries club B-)</p>
         <Spacer height={2} />
-
         <TextLabel required>upload your sunset!</TextLabel>
         <Spacer height={0.5} />
         <UploadSunset>
@@ -225,7 +231,6 @@ const SunsetForm: React.FC = () => {
           autofill from image
         </AutofillCheck>
         <Spacer height={1.5} />
-
         <TextLabel required>when was your sunset?</TextLabel>
         <Spacer height={0.5} />
         <TextInput
@@ -235,7 +240,6 @@ const SunsetForm: React.FC = () => {
           onChange={handleTimestampChange}
         />
         <Spacer height={1.5} />
-
         <TextLabel required>select location on map</TextLabel>
         <Spacer height={0.5} />
         <SelectLocation
@@ -243,7 +247,6 @@ const SunsetForm: React.FC = () => {
           coords={sunsetLocationCoords}
         />
         <Spacer height={1.5} />
-
         <TextLabel>location description</TextLabel>
         <Spacer height={0.5} />
         <TextInput
@@ -253,7 +256,6 @@ const SunsetForm: React.FC = () => {
           onChange={handleLocationNameChange}
         />
         <Spacer height={1.5} />
-
         <TextLabel>add a caption</TextLabel>
         <Spacer height={0.5} />
         <TextArea
@@ -263,7 +265,6 @@ const SunsetForm: React.FC = () => {
           onChange={handleCaptionChange}
         />
         <Spacer height={1.5} />
-
         <TextLabel>what's your name?</TextLabel>
         <Spacer height={0.5} />
         <TextInput
@@ -273,10 +274,22 @@ const SunsetForm: React.FC = () => {
           onChange={handleUserNameChange}
         />
         <Spacer height={1.5} />
-        <Button onClick={handleImageUpload} disabled={!complete}>
+        <TextLabel required>access code</TextLabel>
+        <Spacer height={0.25} />
+        posting is currently limited, please reach out to <TextLink href="mailto:gracewgao@gmail.com">gracewgao@gmail.com</TextLink> for the code!
+        <Spacer height={0.5} />
+        <TextInput
+          value={accessCode}
+          type="text"
+          placeholder=""
+          onChange={handleAccessCodeChange}
+        />
+        <Spacer height={1.5} />
+        <Button onClick={handleSubmit} disabled={!complete}>
           submit
         </Button>
         <p>{message}</p>
+        <p>{response}</p>
         <Spacer height={2} />
       </Container>
     </>

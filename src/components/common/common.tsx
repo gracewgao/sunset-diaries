@@ -98,3 +98,14 @@ export const Checkbox = styled.input`
   margin-right: 0.5rem;
   display: none;
 `;
+
+export const TextLink = styled.a`
+  text-decoration: none;
+  cursor: pointer;
+  color: ${Color.WARM_GREY};
+
+  &:hover {
+    color: ${Color.ORANGE};
+    text-shadow: 0 0 4px ${Color.ORANGE};
+  }
+`;

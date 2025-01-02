@@ -7,7 +7,9 @@ import { invokeLambda, SunsetItem } from "../util/api";
 import Loader from "./Loader";
 
 const Page = styled.div`
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 `;
 
 const Row = styled.div`
@@ -57,13 +59,14 @@ function SunsetDiaries() {
   }, []);
 
   useEffect(() => {
-    if (sunsetIndex < 0) {
-      setSunsetIndex(0);
-    }
-    if (sunsets && sunsetIndex > sunsets.length - 1) {
+    // circular indexing
+    if (sunsets && sunsetIndex < 0) {
       setSunsetIndex(sunsets.length - 1);
     }
-
+    if (sunsets && sunsetIndex > sunsets.length - 1) {
+      setSunsetIndex(0);
+    }
+    // set selected sunset
     if (sunsets && sunsets.length > 0) {
       setSelectedSunset(sunsets[sunsetIndex]);
     }

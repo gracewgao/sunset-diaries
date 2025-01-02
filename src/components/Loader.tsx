@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Color } from "../constants/constants";
 
 const LoaderBg = styled.div<React.HTMLAttributes<HTMLDivElement>>`
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: ${Color.BACKGROUND};
   position: fixed;
@@ -15,13 +15,6 @@ const LoaderBg = styled.div<React.HTMLAttributes<HTMLDivElement>>`
   color: white;
   transition: opacity 0.5s ease-out;
 `;
-
-const LogoWrapper = styled.img`
-  width: 84px;
-  display: block;
-`;
-
-
 
 export default function Loader(props: React.HTMLAttributes<HTMLDivElement>) {
   return (

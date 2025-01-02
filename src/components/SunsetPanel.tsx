@@ -6,12 +6,12 @@ import { SunsetItem } from "../util/api";
 import { useWindowSize } from "../util/windowSize";
 import { IoArrowForward, IoArrowBack } from "react-icons/io5";
 import Spacer from "./common/Spacer";
-import { TextLink } from "./common/common";
 
 const Caption = styled.div`
   text-align: center;
   max-width: 400px;
   flex: 0;
+  box-sizing: border-box;
 `;
 
 const Panel = styled.div`
@@ -26,10 +26,11 @@ const Panel = styled.div`
   grid-template-rows: min-content minmax(0, 1fr);
   grid-template-columns: 1fr;
   max-width: 600px;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
     max-width: 100%;
-    max-height: 60%;
+    height: 60%;
   }
 `;
 

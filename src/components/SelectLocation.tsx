@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -167,23 +167,23 @@ const SearchControl: React.FC<{
 }> = ({ setPosition, position }) => {
   const map = useMap();
 
-  const handleSearchResult = (result: any) => {
-    if (result.location) {
-      setPosition({
-        lat: result.location.y,
-        lng: result.location.x,
-      });
-      map.setView([result.location.y, result.location.x], map.getZoom());
-    }
-  };
-
   useEffect(() => {
     if (position) {
       map.setView([position.lat, position.lng], map.getZoom());
     }
-  }, [position]);
+  }, [position, map]);
 
   useEffect(() => {
+    const handleSearchResult = (result: any) => {
+      if (result.location) {
+        setPosition({
+          lat: result.location.y,
+          lng: result.location.x,
+        });
+        map.setView([result.location.y, result.location.x], map.getZoom());
+      }
+    };
+    
     const provider = new OpenStreetMapProvider();
     const searchControl = new (GeoSearchControl as any)({
       provider,

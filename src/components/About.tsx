@@ -1,6 +1,6 @@
 import React from "react";
 import TopBar from "./TopBar";
-import { Container, GlowingText, TextLink } from "./common/common";
+import { Container, GlowingText, MainText, TextLink } from "./common/common";
 import { styled } from "styled-components";
 import Spacer from "./common/Spacer";
 import WaterlooSunset from "../assets/waterloo_sunset.jpeg";
@@ -10,17 +10,6 @@ const SunsetImage = styled.img`
   width: 100%;
   height: auto;
   border-radius: 10px;
-`;
-
-const MainText = styled.p`
-  color: ${Color.WHITE};
-  
-  a {
-    color: ${Color.WHITE} !important;
-
-    &:hover {
-      color: ${Color.YELLOW} !important;
-    }
 `;
 
 const About: React.FC = () => {

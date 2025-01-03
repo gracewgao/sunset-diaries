@@ -83,7 +83,7 @@ interface ISunsetPanel {
 }
 
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
-  const { width, height, isMobile } = useWindowSize();
+  const { isMobile } = useWindowSize();
 
   const firstDivRef = useRef<HTMLDivElement | null>(null);
   const [captionHeight, setCaptionHeight] = useState<number>(0);

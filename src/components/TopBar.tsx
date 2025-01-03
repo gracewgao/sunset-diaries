@@ -66,7 +66,7 @@ const Link = styled.a`
 `;
 
 function TopBar(props: { homepage?: boolean }) {
-  const { width, height, isMobile } = useWindowSize();
+  const { isMobile } = useWindowSize();
   const navigate = useNavigate();
 
   return (

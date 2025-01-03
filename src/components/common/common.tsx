@@ -130,3 +130,14 @@ export const TextLink = styled.a`
     text-shadow: 0 0 4px ${Color.ORANGE};
   }
 `;
+
+export const MainText = styled.p`
+  color: ${Color.WHITE};
+  
+  a {
+    color: ${Color.WHITE} !important;
+
+    &:hover {
+      color: ${Color.YELLOW} !important;
+    }
+`;

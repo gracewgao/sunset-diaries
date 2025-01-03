@@ -1,9 +1,10 @@
 import { createGlobalStyle } from "styled-components";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import SunsetForm from "./components/SunsetForm";
 import SunsetDiaries from "./components/SunsetDiaries";
 import { Color } from "./constants/constants";
 import About from "./components/About";
+import NotFound from "./components/NotFound";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -42,13 +43,14 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter basename="/sunset-diaries">
+      <HashRouter>
         <Routes>
           <Route path="/" element={<SunsetDiaries />} />
           <Route path="/new" element={<SunsetForm />} />
           <Route path="/about" element={<About />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }

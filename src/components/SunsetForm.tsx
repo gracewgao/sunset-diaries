@@ -41,35 +41,6 @@ const SunsetForm: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [newForm, setNewForm] = useState<boolean>(true);
 
-  const validateInput = () => {
-    if (newForm) {
-      setNewForm(false);
-      return false;
-    }
-    setResponse("");
-    if (image === null) {
-      setMessage("please select an image first!");
-      return false;
-    }
-    if (sunsetTimestamp === 0) {
-      setMessage("missing sunset timestamp!");
-      return false;
-    } else if (sunsetTimestamp > Math.floor(Date.now() / 1000)) {
-      setMessage("sunset timestamp is in the future!");
-      return false;
-    }
-    if (sunsetLocationCoords === null) {
-      setMessage("please select location on the map!");
-      return false;
-    }
-    if (accessCode === "") {
-      setMessage("access code is required!");
-      return false;
-    }
-    setMessage("");
-    return true;
-  };
-
   const toUnixTimestamp = (date: string) =>
     Math.floor(new Date(date).getTime() / 1000);
 
@@ -167,7 +138,7 @@ const SunsetForm: React.FC = () => {
     };
 
     try {
-      const response = await axios.post(API_URL, payload, {
+      await axios.post(API_URL, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -193,8 +164,36 @@ const SunsetForm: React.FC = () => {
   };
 
   useEffect(() => {
+    const validateInput = () => {
+      if (newForm) {
+        setNewForm(false);
+        return false;
+      }
+      setResponse("");
+      if (image === null) {
+        setMessage("please select an image first!");
+        return false;
+      }
+      if (sunsetTimestamp === 0) {
+        setMessage("missing sunset timestamp!");
+        return false;
+      } else if (sunsetTimestamp > Math.floor(Date.now() / 1000)) {
+        setMessage("sunset timestamp is in the future!");
+        return false;
+      }
+      if (sunsetLocationCoords === null) {
+        setMessage("please select location on the map!");
+        return false;
+      }
+      if (accessCode === "") {
+        setMessage("access code is required!");
+        return false;
+      }
+      setMessage("");
+      return true;
+    };
     setComplete(validateInput());
-  }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode]);
+  }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode, newForm]);
 
   return (
     <>

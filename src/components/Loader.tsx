@@ -25,11 +25,11 @@ export default function Loader(props: React.HTMLAttributes<HTMLDivElement>) {
         autoPlay
         loop
         muted
+        playsInline
       >
         <source src="/sunset-diaries/sunsetted.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      {/* <LogoWrapper src={Sunset} /> */}
     </LoaderBg>
   );
 }

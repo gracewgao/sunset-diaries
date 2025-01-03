@@ -32,9 +32,9 @@ const About: React.FC = () => {
         <MainText>
           this is a little project I started for the glowy, crunchy skies in my
           camera roll. I'm a big{" "}
-          <TextLink href="https://playhoarder.com">hoarder</TextLink> of sunsets
-          and finally decided to build a space for hosting them. also I put them
-          on a map because I like maps.
+          <TextLink href="https://playhoarder.com">hoarder</TextLink> of pretty
+          sunsets and wanted a special place to enjoy them. also I put them on a
+          map because I like maps.
         </MainText>
         <MainText>
           if you also have sunset diaries to share, let me know at{" "}

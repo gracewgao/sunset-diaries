@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import TopBar from "./TopBar";
 import { Color } from "../constants/constants";
@@ -35,14 +35,23 @@ const Panel = styled.div`
 `;
 
 const SunsetContent = styled.div`
-  display: grid;
-  place-items: center;
-  grid-template-rows: minmax(0, 1fr) min-content;
-  grid-template-columns: 1fr;
   box-sizing: border-box;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   padding: 24px;
   text-align: center;
+`;
+
+const ImageContainer = styled.div<{ caption?: number }>`
+  width: 100%;
+  height: calc(100% - ${(props) => props.caption}px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SunsetImage = styled.img`
@@ -50,7 +59,6 @@ const SunsetImage = styled.img`
   max-height: 100%;
   width: auto;
   height: auto;
-  flex: 1;
   border-radius: 10px;
 `;
 
@@ -77,6 +85,27 @@ interface ISunsetPanel {
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
   const { width, height, isMobile } = useWindowSize();
 
+  const firstDivRef = useRef<HTMLDivElement | null>(null);
+  const [captionHeight, setCaptionHeight] = useState<number>(0);
+
+  useEffect(() => {
+    if (firstDivRef.current) {
+      // set initial caption height
+      setCaptionHeight(firstDivRef.current.offsetHeight);
+
+      // attach resize observer
+      const resizeObserver = new ResizeObserver(() => {
+        if (firstDivRef.current) {
+          setCaptionHeight(firstDivRef.current.offsetHeight);
+        }
+      });
+      resizeObserver.observe(firstDivRef.current);
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
+  }, [firstDivRef.current]);
+
   // unix to string date formatter
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
@@ -94,8 +123,10 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
       <SunsetContent>
         {props.sunset == null ? null : (
           <>
-            <SunsetImage src={props.sunset.sunsetUrl} />
-            <Caption>
+            <ImageContainer caption={captionHeight}>
+              <SunsetImage src={props.sunset.sunsetUrl} />
+            </ImageContainer>
+            <Caption ref={firstDivRef}>
               {isMobile ? null : (
                 <p>
                   <i>{props.sunset.sunsetCaption}</i>

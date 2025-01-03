@@ -92,6 +92,7 @@ export const TextInput = styled.input`
   border-radius: 8px;
   font-size: 1rem;
   font-family: "Inclusive Sans";
+  -webkit-appearance: none;
 `;
 
 export const TextArea = styled.textarea`

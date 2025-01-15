@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/sunset-diaries/static/css/main.e6e37d0b.css",
-    "main.js": "/sunset-diaries/static/js/main.f4a2456b.js",
+    "main.js": "/sunset-diaries/static/js/main.32842cd8.js",
     "static/js/453.578c7871.chunk.js": "/sunset-diaries/static/js/453.578c7871.chunk.js",
     "static/media/waterloo_sunset.jpeg": "/sunset-diaries/static/media/waterloo_sunset.db4db3c638886816b04d.jpeg",
     "index.html": "/sunset-diaries/index.html",
     "static/media/logo.svg": "/sunset-diaries/static/media/logo.da5a46520c7c354777ee669b5ce10c03.svg",
     "main.e6e37d0b.css.map": "/sunset-diaries/static/css/main.e6e37d0b.css.map",
-    "main.f4a2456b.js.map": "/sunset-diaries/static/js/main.f4a2456b.js.map",
+    "main.32842cd8.js.map": "/sunset-diaries/static/js/main.32842cd8.js.map",
     "453.578c7871.chunk.js.map": "/sunset-diaries/static/js/453.578c7871.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6e37d0b.css",
-    "static/js/main.f4a2456b.js"
+    "static/js/main.32842cd8.js"
   ]
 }

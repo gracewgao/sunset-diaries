@@ -153,6 +153,7 @@ const SunsetForm: React.FC = () => {
   };
 
   const resetForm = () => {
+    setNewForm(true);
     setImage(null);
     setAutofill(true);
     setSunsetCaption("");
@@ -160,18 +161,22 @@ const SunsetForm: React.FC = () => {
     setSunsetLocationCoords(null);
     setSunsetTimestamp(0);
     setTimestamp("");
-    setNewForm(true);
   };
 
   useEffect(() => {
     const validateInput = () => {
       if (newForm) {
+        setMessage("");
         setNewForm(false);
         return false;
       }
       setResponse("");
       if (image === null) {
         setMessage("please select an image first!");
+        return false;
+      }
+      if (image.type !== 'image/jpeg') {
+        setMessage("only jpeg images allowed!");
         return false;
       }
       if (sunsetTimestamp === 0) {
@@ -193,7 +198,7 @@ const SunsetForm: React.FC = () => {
       return true;
     };
     setComplete(validateInput());
-  }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode, newForm]);
+  }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode]);
 
   return (
     <>

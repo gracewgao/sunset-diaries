@@ -36,6 +36,8 @@ function SunsetDiaries() {
         response.forEach((item: SunsetItem) => {
           map.set(item.sunsetId, item);
         });
+        const randomSunset = Math.floor(Math.random() * response.length);
+        setSunsetIndex(randomSunset);
       }
     } catch (err) {
       console.error("Error:", err);

@@ -27,7 +27,8 @@ export default function Loader(props: React.HTMLAttributes<HTMLDivElement>) {
         muted
         playsInline
       >
-        <source src="/sunset-diaries/sunsetted.mp4" type="video/mp4" />
+        {/* <source src="/sunset-diaries/sunsetted.mp4" type="video/mp4" /> for gracewgao.me */}
+        <source src="/sunsetted.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </LoaderBg>

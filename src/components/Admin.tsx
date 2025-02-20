@@ -181,37 +181,46 @@ const Admin: React.FC = () => {
         <p>{response}</p>
         <Spacer height={1.5} />
         <Toggle heading={`pending (${pending.length})`}>
-          {pending.map((item) => (
-            <ReviewItem
-              key={item.sunsetId}
-              updateApprovalStatus={updateApprovalStatus}
-              item={item}
-              complete={complete}
-            />
+          {pending.map((item, i) => (
+            <>
+              <ReviewItem
+                key={item.sunsetId}
+                updateApprovalStatus={updateApprovalStatus}
+                item={item}
+                complete={complete}
+              />
+              {i != pending.length - 1 ? <Spacer height={1} /> : null}
+            </>
           ))}
           {pending.length === 0 ? "no pending submissions" : null}
         </Toggle>
         <Spacer height={1} />
         <Toggle heading={`approved (${approved.length})`}>
-          {approved.map((item) => (
-            <ReviewItem
-              key={item.sunsetId}
-              updateApprovalStatus={updateApprovalStatus}
-              item={item}
-              complete={complete}
-            />
+          {approved.map((item, i) => (
+            <>
+              <ReviewItem
+                key={item.sunsetId}
+                updateApprovalStatus={updateApprovalStatus}
+                item={item}
+                complete={complete}
+              />
+              {i != approved.length - 1 ? <Spacer height={1} /> : null}
+            </>
           ))}
           {approved.length === 0 ? "no approved submissions" : null}
         </Toggle>
         <Spacer height={1} />
         <Toggle heading={`rejected (${rejected.length})`}>
-          {rejected.map((item) => (
-            <ReviewItem
-              key={item.sunsetId}
-              updateApprovalStatus={updateApprovalStatus}
-              item={item}
-              complete={complete}
-            />
+          {rejected.map((item, i) => (
+            <>
+              <ReviewItem
+                key={item.sunsetId}
+                updateApprovalStatus={updateApprovalStatus}
+                item={item}
+                complete={complete}
+              />
+              {i != rejected.length - 1 ? <Spacer height={1} /> : null}
+            </>
           ))}
           {rejected.length === 0 ? "no rejected submissions" : null}
         </Toggle>

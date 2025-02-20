@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import SelectLocation, { SunsetLocationCoords } from "./SelectLocation";
 import { API_URL } from "../constants/constants";
@@ -40,6 +40,8 @@ const SunsetForm: React.FC = () => {
   const [accessCode, setAccessCode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [newForm, setNewForm] = useState<boolean>(true);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const toUnixTimestamp = (date: string) =>
     Math.floor(new Date(date).getTime() / 1000);
@@ -128,12 +130,13 @@ const SunsetForm: React.FC = () => {
 
     const imageBase64 = await convertBase64(image!!);
     const payload = {
-      sunset_caption: validator.escape(sunsetCaption),
+      // sanitization done on server
+      sunset_caption: sunsetCaption,
       sunset_location_coords: sunsetLocationCoords,
-      sunset_location_name: validator.escape(sunsetLocationName),
+      sunset_location_name: sunsetLocationName,
       sunset_timestamp: sunsetTimestamp,
-      user_name: validator.escape(userName),
-      access_code: validator.escape(accessCode),
+      user_name: userName,
+      access_code: accessCode,
       sunset_image: imageBase64,
     };
 
@@ -161,6 +164,10 @@ const SunsetForm: React.FC = () => {
     setSunsetLocationCoords(null);
     setSunsetTimestamp(0);
     setTimestamp("");
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   useEffect(() => {
@@ -224,7 +231,7 @@ const SunsetForm: React.FC = () => {
               </>
             )}
           </UploadDisplay>
-          <input type="file" accept="image/jpeg" onChange={handleImageChange} />
+          <input ref={fileInputRef} type="file" accept="image/jpeg" onChange={handleImageChange} />
         </UploadSunset>
         <Spacer height={1} />
         <AutofillCheck>

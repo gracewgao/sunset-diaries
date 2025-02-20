@@ -1,4 +1,5 @@
 import { API_URL } from "../constants/constants";
+import he from "he";
 
 const GET_SUNSETS_URL = `${API_URL}/sunsets/all`;
 
@@ -67,16 +68,16 @@ export const getDisplaySunsets = async (payload?: object): Promise<SunsetItem[]>
     const result: ApiResponse = await response.json();
     try {
       const sunsets: SunsetItem[] = result.items.map((item) => ({
-        sunsetCaption: item.sunset_caption.S ?? "",
+        sunsetCaption: he.decode(item.sunset_caption.S ?? ""),
         sunsetId: item.sunset_id.S!!,
         sunsetLocationCoords: {
           lat: parseFloat(item.sunset_location_coords.M!!.lat.N!!),
           lng: parseFloat(item.sunset_location_coords.M!!.lng.N!!),
         },
-        sunsetLocationName: item.sunset_location_name.S ?? "",
+        sunsetLocationName: he.decode(item.sunset_location_name.S ?? ""),
         sunsetTimestamp: parseInt(item.sunset_timestamp.N!!, 10),
         sunsetUrl: item.sunset_url.S ?? "",
-        userName: item.user_name.S ?? "",
+        userName: he.decode(item.user_name.S ?? ""),
         approved: item.approved.S ?? "",
         uploadTimestamp: parseInt(item.upload_timestamp.N!!, 10),
         index: -1, // assign after sorting
@@ -115,16 +116,16 @@ export const getAdminSunsets = async (accessCode: string): Promise<SunsetItem[]>
     const result: ApiResponse = await response.json();
     try {
       const posts: SunsetItem[] = result.items.map((item) => ({
-        sunsetCaption: item.sunset_caption.S ?? "",
+        sunsetCaption: he.decode(item.sunset_caption.S ?? ""),
         sunsetId: item.sunset_id.S!!,
         sunsetLocationCoords: {
           lat: parseFloat(item.sunset_location_coords.M!!.lat.N!!),
           lng: parseFloat(item.sunset_location_coords.M!!.lng.N!!),
         },
-        sunsetLocationName: item.sunset_location_name.S ?? "",
+        sunsetLocationName: he.decode(item.sunset_location_name.S ?? ""),
         sunsetTimestamp: parseInt(item.sunset_timestamp.N!!, 10),
         sunsetUrl: item.sunset_url.S ?? "",
-        userName: item.user_name.S ?? "",
+        userName: he.decode(item.user_name.S ?? ""),
         index: -1, // assign after sorting
         approved: item.approved.S ?? "",
         uploadTimestamp: parseInt(item.upload_timestamp.N!!, 10),
@@ -133,7 +134,7 @@ export const getAdminSunsets = async (accessCode: string): Promise<SunsetItem[]>
         (a, b) => a.uploadTimestamp - b.uploadTimestamp
       );
       posts.forEach((item, index) => {
-        item.index = index;
+        item.index = index + 1;
       });
       return posts;
     } catch (error) {

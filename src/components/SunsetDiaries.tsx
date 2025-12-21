@@ -3,13 +3,11 @@ import { styled } from "styled-components";
 import "leaflet/dist/leaflet.css";
 import SunsetMap from "./Map";
 import SunsetPanel from "./SunsetPanel";
-import { getDisplaySunsets, Status, SunsetItem } from "../util/api";
-import Loader from "./Loader";
+import { getDisplaySunsets, SunsetItem } from "../util/api";
 
 const Page = styled.div`
-  height: 100%;
+  height: 100vh;
   width: 100%;
-  position: fixed;
 `;
 
 const Row = styled.div`
@@ -44,57 +42,36 @@ function SunsetDiaries() {
     }
   };
 
-  // fetch data on component load
   useEffect(() => {
     fetchData();
   }, []);
 
-  // loader stuff
-  const [loaded, setLoaded] = useState(false);
-  const [time, setTime] = useState(false);
-
   useEffect(() => {
-    setLoaded(document.readyState === "complete");
-    setTimeout(() => {
-      setTime(true);
-    }, 3000);
-  }, []);
-
-  useEffect(() => {
-    // circular indexing
     if (sunsets && sunsetIndex < 0) {
       setSunsetIndex(sunsets.length - 1);
     }
     if (sunsets && sunsetIndex > sunsets.length - 1) {
       setSunsetIndex(0);
     }
-    // set selected sunset
     if (sunsets && sunsets.length > 0) {
       setSelectedSunset(sunsets[sunsetIndex]);
     }
   }, [sunsetIndex, sunsets]);
 
-  document.onreadystatechange = () => {
-    setLoaded(document.readyState === "complete");
-  };
-
   return (
-    <>
-      <Loader className={loaded && time ? "inactive" : "active"} />
-      <Page>
-        <Row>
-          <SunsetPanel
-            sunset={selectedSunset}
-            setSunsetIndex={setSunsetIndex}
-          />
-          <SunsetMap
-            sunsets={sunsets ?? []}
-            onMarkerClick={setSunsetIndex}
-            selectedSunset={selectedSunset}
-          />
-        </Row>
-      </Page>
-    </>
+    <Page>
+      <Row>
+        <SunsetPanel
+          sunset={selectedSunset}
+          setSunsetIndex={setSunsetIndex}
+        />
+        <SunsetMap
+          sunsets={sunsets ?? []}
+          onMarkerClick={setSunsetIndex}
+          selectedSunset={selectedSunset}
+        />
+      </Row>
+    </Page>
   );
 }
 

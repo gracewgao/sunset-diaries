@@ -51,6 +51,7 @@ export const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   padding: 2rem;
+  padding-top: 4rem;
 `;
 
 export const GlowingText = styled.div`

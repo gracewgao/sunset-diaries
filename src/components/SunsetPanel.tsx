@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import TopBar from "./TopBar";
 import { Color } from "../constants/constants";
 import { SunsetItem } from "../util/api";
 import { useWindowSize } from "../util/windowSize";
@@ -23,28 +22,18 @@ const Panel = styled.div`
   box-shadow: 0 1px 0 1px ${Color.BACKGROUND};
   z-index: 1;
 
-  display: grid;
-  grid-template-rows: min-content minmax(0, 1fr);
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   max-width: 600px;
   box-sizing: border-box;
+  padding: 24px;
 
   @media (max-width: 768px) {
     max-width: 100%;
     height: 60%;
   }
-`;
-
-const SunsetContent = styled.div`
-  box-sizing: border-box;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  padding: 24px;
-  text-align: center;
 `;
 
 const ImageContainer = styled.div<{ caption?: number }>`
@@ -91,10 +80,8 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
 
   useEffect(() => {
     if (firstDivRef.current) {
-      // set initial caption height
       setCaptionHeight(firstDivRef.current.offsetHeight);
 
-      // attach resize observer
       const resizeObserver = new ResizeObserver(() => {
         if (firstDivRef.current) {
           setCaptionHeight(firstDivRef.current.offsetHeight);
@@ -109,49 +96,46 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
 
   return (
     <Panel>
-      <TopBar homepage />
-      <SunsetContent>
-        {props.sunset == null ? null : (
-          <>
-            <ImageContainer caption={captionHeight}>
-              <SunsetImage src={props.sunset.sunsetUrl} />
-            </ImageContainer>
-            <Caption ref={firstDivRef}>
-              {isMobile ? null : (
-                <p>
-                  <i>{props.sunset.sunsetCaption}</i>
-                </p>
-              )}
-              <Metadata>
-                {props.sunset.userName
-                  ? `${props.sunset.userName}'s sunset • `
-                  : ""}
-                {props.sunset.sunsetLocationName
-                  ? ` ${props.sunset.sunsetLocationName} • `
-                  : ""}
-                {formatTimestamp(props.sunset.sunsetTimestamp)}
-              </Metadata>
-              <Arrow
-                onClick={() => {
-                  if (props.sunset)
-                    props.setSunsetIndex(props.sunset.index - 1);
-                }}
-              >
-                <IoArrowBack size={18} />
-              </Arrow>
-              <Spacer width={1} />
-              <Arrow
-                onClick={() => {
-                  if (props.sunset)
-                    props.setSunsetIndex(props.sunset.index + 1);
-                }}
-              >
-                <IoArrowForward size={18} />
-              </Arrow>
-            </Caption>
-          </>
-        )}
-      </SunsetContent>
+      {props.sunset == null ? null : (
+        <>
+          <ImageContainer caption={captionHeight}>
+            <SunsetImage src={props.sunset.sunsetUrl} />
+          </ImageContainer>
+          <Caption ref={firstDivRef}>
+            {isMobile ? null : (
+              <p>
+                <i>{props.sunset.sunsetCaption}</i>
+              </p>
+            )}
+            <Metadata>
+              {props.sunset.userName
+                ? `${props.sunset.userName}'s sunset • `
+                : ""}
+              {props.sunset.sunsetLocationName
+                ? ` ${props.sunset.sunsetLocationName} • `
+                : ""}
+              {formatTimestamp(props.sunset.sunsetTimestamp)}
+            </Metadata>
+            <Arrow
+              onClick={() => {
+                if (props.sunset)
+                  props.setSunsetIndex(props.sunset.index - 1);
+              }}
+            >
+              <IoArrowBack size={18} />
+            </Arrow>
+            <Spacer width={1} />
+            <Arrow
+              onClick={() => {
+                if (props.sunset)
+                  props.setSunsetIndex(props.sunset.index + 1);
+              }}
+            >
+              <IoArrowForward size={18} />
+            </Arrow>
+          </Caption>
+        </>
+      )}
     </Panel>
   );
 };

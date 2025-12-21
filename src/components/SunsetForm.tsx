@@ -3,7 +3,6 @@ import axios from "axios";
 import SelectLocation, { SunsetLocationCoords } from "./SelectLocation";
 import { API_URL } from "../constants/constants";
 import Spacer from "./common/Spacer";
-import TopBar from "./TopBar";
 import { IoAdd, IoImage } from "react-icons/io5";
 import { BsCheckCircleFill, BsCircle } from "react-icons/bs";
 
@@ -20,7 +19,6 @@ import {
   UploadSunset,
 } from "./common/common";
 import TextLabel from "./common/TextLabel";
-import validator from "validator";
 
 const SunsetForm: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -62,7 +60,6 @@ const SunsetForm: React.FC = () => {
   const fillExifData = async (file: File) => {
     const tags = await ExifReader.load(file);
 
-    // sunset timestamp
     if (tags["DateTimeOriginal"]) {
       const imageDate = tags["DateTimeOriginal"]!!.description;
       const isoDate = imageDate.replace(/^(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3");
@@ -70,7 +67,6 @@ const SunsetForm: React.FC = () => {
       setSunsetTimestamp(toUnixTimestamp(isoDate));
     }
 
-    // sunset location
     if (tags["GPSLatitude"] && tags["GPSLongitude"]) {
       const latRef = tags["GPSLatitudeRef"]!!.description;
       const lngRef = tags["GPSLongitudeRef"]!!.description;
@@ -129,7 +125,6 @@ const SunsetForm: React.FC = () => {
 
     const imageBase64 = await convertBase64(image!!);
     const payload = {
-      // sanitization done on server
       sunset_caption: sunsetCaption,
       sunset_location_coords: sunsetLocationCoords,
       sunset_location_name: sunsetLocationName,
@@ -202,105 +197,102 @@ const SunsetForm: React.FC = () => {
   }, [image, sunsetTimestamp, sunsetLocationCoords, accessCode]);
 
   return (
-    <>
-      <TopBar />
-      <Container>
-        <GlowingText>share your sunset</GlowingText>
-        <p>welcome to the sunset diaries club B-)</p>
-        <Spacer height={2} />
-        <TextLabel required>upload your sunset!</TextLabel>
-        <Spacer height={0.5} />
-        <UploadSunset>
-          <UploadDisplay>
-            {image ? (
-              <>
-                <IoImage size={32} />
-                <Spacer height={0.25} />
-                {image.name}
-              </>
-            ) : (
-              <>
-                <IoAdd size={32} />
-                <Spacer height={0.25} />
-                upload image
-              </>
-            )}
-          </UploadDisplay>
-          <input ref={fileInputRef} type="file" accept="image/jpeg" onChange={handleImageChange} />
-        </UploadSunset>
-        <Spacer height={1} />
-        <AutofillCheck>
-          <Checkbox
-            type="checkbox"
-            checked={autofill}
-            onChange={handleAutofill}
-          />
-          {autofill ? <BsCheckCircleFill size={18} /> : <BsCircle size={18} />}
-          autofill from image
-        </AutofillCheck>
-        <Spacer height={1.5} />
-        <TextLabel required>when was your sunset?</TextLabel>
-        <Spacer height={0.5} />
-        <TextInput
-          type="datetime-local"
-          id="datetime"
-          value={timestamp}
-          onChange={handleTimestampChange}
+    <Container>
+      <GlowingText>share your sunset</GlowingText>
+      <p>welcome to the sunset diaries club B-)</p>
+      <Spacer height={2} />
+      <TextLabel required>upload your sunset!</TextLabel>
+      <Spacer height={0.5} />
+      <UploadSunset>
+        <UploadDisplay>
+          {image ? (
+            <>
+              <IoImage size={32} />
+              <Spacer height={0.25} />
+              {image.name}
+            </>
+          ) : (
+            <>
+              <IoAdd size={32} />
+              <Spacer height={0.25} />
+              upload image
+            </>
+          )}
+        </UploadDisplay>
+        <input ref={fileInputRef} type="file" accept="image/jpeg" onChange={handleImageChange} />
+      </UploadSunset>
+      <Spacer height={1} />
+      <AutofillCheck>
+        <Checkbox
+          type="checkbox"
+          checked={autofill}
+          onChange={handleAutofill}
         />
-        <Spacer height={1.5} />
-        <TextLabel required>select location on map</TextLabel>
-        <Spacer height={0.5} />
-        <SelectLocation
-          setCoords={setSunsetLocationCoords}
-          coords={sunsetLocationCoords}
-        />
-        <Spacer height={1.5} />
-        <TextLabel>location description</TextLabel>
-        <Spacer height={0.5} />
-        <TextInput
-          value={sunsetLocationName}
-          type="text"
-          placeholder="ocean beach"
-          onChange={handleLocationNameChange}
-        />
-        <Spacer height={1.5} />
-        <TextLabel>add a caption</TextLabel>
-        <Spacer height={0.5} />
-        <TextArea
-          value={sunsetCaption}
-          rows={3}
-          placeholder="west coast best coast!!! <3"
-          onChange={handleCaptionChange}
-        />
-        <Spacer height={1.5} />
-        <TextLabel>what's your name?</TextLabel>
-        <Spacer height={0.5} />
-        <TextInput
-          value={userName}
-          type="text"
-          placeholder="olivia"
-          onChange={handleUserNameChange}
-        />
-        <Spacer height={1.5} />
-        <TextLabel>access code</TextLabel>
-        <Spacer height={0.25} />
-        optional! your sunset will be subject to review without an access code.
-        <Spacer height={0.5} />
-        <TextInput
-          value={accessCode}
-          type="text"
-          placeholder=""
-          onChange={handleAccessCodeChange}
-        />
-        <Spacer height={1.5} />
-        <Button onClick={handleSubmit} disabled={!complete} loading={loading}>
-          {loading ? "sending..." : "submit"}
-        </Button>
-        <p>{message}</p>
-        <p>{response}</p>
-        <Spacer height={2} />
-      </Container>
-    </>
+        {autofill ? <BsCheckCircleFill size={18} /> : <BsCircle size={18} />}
+        autofill from image
+      </AutofillCheck>
+      <Spacer height={1.5} />
+      <TextLabel required>when was your sunset?</TextLabel>
+      <Spacer height={0.5} />
+      <TextInput
+        type="datetime-local"
+        id="datetime"
+        value={timestamp}
+        onChange={handleTimestampChange}
+      />
+      <Spacer height={1.5} />
+      <TextLabel required>select location on map</TextLabel>
+      <Spacer height={0.5} />
+      <SelectLocation
+        setCoords={setSunsetLocationCoords}
+        coords={sunsetLocationCoords}
+      />
+      <Spacer height={1.5} />
+      <TextLabel>location description</TextLabel>
+      <Spacer height={0.5} />
+      <TextInput
+        value={sunsetLocationName}
+        type="text"
+        placeholder="ocean beach"
+        onChange={handleLocationNameChange}
+      />
+      <Spacer height={1.5} />
+      <TextLabel>add a caption</TextLabel>
+      <Spacer height={0.5} />
+      <TextArea
+        value={sunsetCaption}
+        rows={3}
+        placeholder="west coast best coast!!! <3"
+        onChange={handleCaptionChange}
+      />
+      <Spacer height={1.5} />
+      <TextLabel>what's your name?</TextLabel>
+      <Spacer height={0.5} />
+      <TextInput
+        value={userName}
+        type="text"
+        placeholder="olivia"
+        onChange={handleUserNameChange}
+      />
+      <Spacer height={1.5} />
+      <TextLabel>access code</TextLabel>
+      <Spacer height={0.25} />
+      optional! your sunset will be subject to review without an access code.
+      <Spacer height={0.5} />
+      <TextInput
+        value={accessCode}
+        type="text"
+        placeholder=""
+        onChange={handleAccessCodeChange}
+      />
+      <Spacer height={1.5} />
+      <Button onClick={handleSubmit} disabled={!complete} loading={loading}>
+        {loading ? "sending..." : "submit"}
+      </Button>
+      <p>{message}</p>
+      <p>{response}</p>
+      <Spacer height={2} />
+    </Container>
   );
 };
 

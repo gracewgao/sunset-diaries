@@ -123,8 +123,11 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
                 </p>
               )}
               <Metadata>
+                {props.sunset.userName
+                  ? `${props.sunset.userName}'s sunset • `
+                  : ""}
                 {props.sunset.sunsetLocationName
-                  ? ` ${props.sunset.sunsetLocationName}'s sunset • `
+                  ? ` ${props.sunset.sunsetLocationName} • `
                   : ""}
                 {formatTimestamp(props.sunset.sunsetTimestamp)}
               </Metadata>

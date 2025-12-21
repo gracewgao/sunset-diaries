@@ -120,11 +120,11 @@ export const Checkbox = styled.input`
   display: none;
 `;
 
-export const TextLink = styled.a`
+export const TextLink = styled.a<{ noStyle?: boolean }>`
   text-decoration: none;
   cursor: pointer;
-  color: ${Color.YELLOW};
-  text-shadow: 0 0 4px ${Color.ORANGE};
+  color: ${(props) => props.noStyle ? "inherit" : `${Color.YELLOW}`};
+  text-shadow: ${(props) => props.noStyle ? "inherit" : `0 0 4px ${Color.ORANGE}`};
 
   &:hover {
     color: ${Color.ORANGE};

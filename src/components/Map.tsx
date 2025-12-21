@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, CircleMarker, useMap } from "react-leaflet";
 import { styled } from "styled-components";
-import { Color, DEFAULT_ZOOM, KITCHENER } from "../constants/constants";
+import { Color, DEFAULT_ZOOM, NEW_YORK } from "../constants/constants";
 import { SunsetItem } from "../util/api";
 import { LatLngBoundsExpression } from "leaflet";
 
@@ -82,8 +82,8 @@ interface IMap {
 
 const SunsetMap: React.FC<IMap> = (props: IMap) => {
   const [center, setCenter] = useState<[number, number]>([
-    KITCHENER[0], KITCHENER[1]
-  ]); // default: kitchener
+    NEW_YORK[0], NEW_YORK[1]
+  ]); // default: new york
 
   const CenterMapOnMarker = ({ position }: { position: [number, number] }) => {
     const map = useMap();

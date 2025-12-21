@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { SunsetLocationCoords } from "./SelectLocation";
 import { API_URL, Color } from "../constants/constants";
 import Spacer from "./common/Spacer";
 import TopBar from "./TopBar";
@@ -121,10 +120,10 @@ const Admin: React.FC = () => {
         return;
       }
       await axios.patch(
-        `${API_URL}/posts/review`,
+        `${API_URL}/sunsets/review`,
         {
-          post_id: item.sunsetId,
-          post_status: status,
+          sunset_id: item.sunsetId,
+          sunset_status: status,
         },
         {
           headers: {

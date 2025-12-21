@@ -16,7 +16,6 @@ import {
   GlowingText,
   TextArea,
   TextInput,
-  TextLink,
   UploadDisplay,
   UploadSunset,
 } from "./common/common";
@@ -141,7 +140,7 @@ const SunsetForm: React.FC = () => {
     };
 
     try {
-      await axios.post(API_URL, payload, {
+      await axios.post(`${API_URL}/sunsets/new`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -194,10 +193,6 @@ const SunsetForm: React.FC = () => {
       }
       if (sunsetLocationCoords === null) {
         setMessage("please select location on the map!");
-        return false;
-      }
-      if (accessCode === "") {
-        setMessage("access code is required!");
         return false;
       }
       setMessage("");
@@ -287,13 +282,9 @@ const SunsetForm: React.FC = () => {
           onChange={handleUserNameChange}
         />
         <Spacer height={1.5} />
-        <TextLabel required>access code</TextLabel>
+        <TextLabel>access code</TextLabel>
         <Spacer height={0.25} />
-        posting is currently limited, please reach out to{" "}
-        <TextLink href="mailto:gracewgao@gmail.com">
-          gracewgao@gmail.com
-        </TextLink>{" "}
-        for the code!
+        optional! your sunset will be subject to review without an access code.
         <Spacer height={0.5} />
         <TextInput
           value={accessCode}

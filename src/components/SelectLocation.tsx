@@ -10,7 +10,7 @@ import "leaflet/dist/leaflet.css";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import "leaflet-geosearch/dist/geosearch.css";
 import styled from "styled-components";
-import { Color, KITCHENER } from "../constants/constants";
+import { Color, NEW_YORK } from "../constants/constants";
 import { LatLngExpression } from "leaflet";
 
 export interface SunsetLocationCoords {
@@ -208,7 +208,7 @@ const SelectLocation: React.FC<{
   setCoords: React.Dispatch<React.SetStateAction<SunsetLocationCoords | null>>;
   coords: SunsetLocationCoords | null;
 }> = ({ setCoords, coords }) => {
-  const CENTER: LatLngExpression = [KITCHENER[0], KITCHENER[1]];
+  const CENTER: LatLngExpression = [NEW_YORK[0], NEW_YORK[1]];
   return (
     <Container>
       <MapBox

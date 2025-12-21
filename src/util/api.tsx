@@ -115,7 +115,7 @@ export const getAdminSunsets = async (accessCode: string): Promise<SunsetItem[]>
 
     const result: ApiResponse = await response.json();
     try {
-      const posts: SunsetItem[] = result.items.map((item) => ({
+      const sunsets: SunsetItem[] = result.items.map((item) => ({
         sunsetCaption: he.decode(item.sunset_caption.S ?? ""),
         sunsetId: item.sunset_id.S!!,
         sunsetLocationCoords: {
@@ -130,13 +130,13 @@ export const getAdminSunsets = async (accessCode: string): Promise<SunsetItem[]>
         approved: item.approved.S ?? "",
         uploadTimestamp: parseInt(item.upload_timestamp.N!!, 10),
       }));
-      posts.sort(
+      sunsets.sort(
         (a, b) => a.uploadTimestamp - b.uploadTimestamp
       );
-      posts.forEach((item, index) => {
+      sunsets.forEach((item, index) => {
         item.index = index + 1;
       });
-      return posts;
+      return sunsets;
     } catch (error) {
       console.error("error parsing response:", error);
       throw error;

@@ -7,4 +7,7 @@ export enum Color {
   WHITE = "#E9E2DB",
 }
 
-export const API_URL = "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/sunsets/new";
+export const API_URL = "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com";
+
+export const NEW_YORK = [40.712776, -74.005974];
+export const DEFAULT_ZOOM = 12;

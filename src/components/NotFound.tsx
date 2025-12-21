@@ -11,7 +11,7 @@ const NotFound: React.FC = () => {
       <Container>
         <GlowingText>404</GlowingText>
         <MainText>oops! no sunsets here...</MainText>
-        <TextLink onClick={() => navigate("/")}>
+        <TextLink noStyle onClick={() => navigate("/")}>
           return to homepage
         </TextLink>
       </Container>

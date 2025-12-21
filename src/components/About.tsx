@@ -1,10 +1,16 @@
 import React from "react";
 import TopBar from "./TopBar";
-import { Container, GlowingText, MainText, TextLink } from "./common/common";
+import {
+  Button,
+  Container,
+  GlowingText,
+  MainText,
+  Subheading,
+  TextLink,
+} from "./common/common";
 import { styled } from "styled-components";
 import Spacer from "./common/Spacer";
 import WaterlooSunset from "../assets/waterloo_sunset.jpeg";
-import { Color } from "../constants/constants";
 
 const SunsetImage = styled.img`
   width: 100%;
@@ -19,28 +25,23 @@ const About: React.FC = () => {
       <Container>
         <GlowingText>dear sunset diaries,</GlowingText>
         <MainText>
-          this is a little project I started for the glowy, crunchy skies in my
-          camera roll. I'm a big{" "}
-          <TextLink href="https://playhoarder.com">hoarder</TextLink> of pretty
-          sunsets and wanted a special place to enjoy them. also I put them on a
-          map because I like maps.
+          I used to have beautiful west-facing windows in college and saw the
+          most magical sunsets from my room. this project is for remembering all
+          the pretty skies I come across and the days that come between them.
         </MainText>
         <MainText>
-          if you also have sunset diaries to share, let me know at{" "}
-          <TextLink href="mailto:gracewgao@gmail.com">
-            gracewgao@gmail.com
-          </TextLink>{" "}
-          to get the access code! please be nice and post responsibly.
+          if you also have sunset diaries to share, please feel free to
+          contribute! please be nice and post responsibly.
         </MainText>
         <p>
           {"made with <3 by "}
-          <TextLink href="https://gracewgao.me/">grace</TextLink>
+          <TextLink noStyle href="https://gracewgao.me/">grace</TextLink>
         </p>
         <Spacer height={0.5} />
         <SunsetImage src={WaterlooSunset} />
         <p>
           ps. nothing beats a{" "}
-          <TextLink href="https://open.spotify.com/track/3G0EALIIp5DAeIERxXBHmo?si=edcb03fde50e4fa2">
+          <TextLink noStyle href="https://open.spotify.com/track/3G0EALIIp5DAeIERxXBHmo?si=edcb03fde50e4fa2">
             waterloo sunset
           </TextLink>
         </p>

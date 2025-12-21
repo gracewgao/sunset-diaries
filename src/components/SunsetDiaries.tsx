@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import "leaflet/dist/leaflet.css";
 import SunsetMap from "./Map";
 import SunsetPanel from "./SunsetPanel";
-import { invokeLambda, SunsetItem } from "../util/api";
+import { getDisplaySunsets, Status, SunsetItem } from "../util/api";
 import Loader from "./Loader";
 
 const Page = styled.div`
@@ -28,7 +28,7 @@ function SunsetDiaries() {
 
   const fetchData = async () => {
     try {
-      const response: SunsetItem[] = await invokeLambda();
+      let response: SunsetItem[] = await getDisplaySunsets();
       setSunsets(response);
 
       const map = new Map<string, SunsetItem>();

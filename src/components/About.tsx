@@ -1,10 +1,16 @@
 import React from "react";
 import TopBar from "./TopBar";
-import { Container, GlowingText, MainText, TextLink } from "./common/common";
+import {
+  Button,
+  Container,
+  GlowingText,
+  MainText,
+  Subheading,
+  TextLink,
+} from "./common/common";
 import { styled } from "styled-components";
 import Spacer from "./common/Spacer";
 import WaterlooSunset from "../assets/waterloo_sunset.jpeg";
-import { Color } from "../constants/constants";
 
 const SunsetImage = styled.img`
   width: 100%;

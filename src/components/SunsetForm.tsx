@@ -174,8 +174,7 @@ const SunsetForm: React.FC = () => {
       if (image === null) {
         setMessage("please select an image first!");
         return false;
-      }
-      if (image.type !== 'image/jpeg') {
+      } else if (image.type !== 'image/jpeg') {
         setMessage("only jpeg images allowed!");
         return false;
       }

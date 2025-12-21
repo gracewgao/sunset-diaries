@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, CircleMarker, useMap } from "react-leaflet";
 import { styled } from "styled-components";
-import { Color } from "../constants/constants";
+import { Color, DEFAULT_ZOOM, KITCHENER } from "../constants/constants";
 import { SunsetItem } from "../util/api";
 import { LatLngBoundsExpression } from "leaflet";
 
@@ -80,19 +80,17 @@ interface IMap {
   selectedSunset?: SunsetItem;
 }
 
-const randomDistance = () => Math.random() * 0.001 - 0.0005;
-
 const SunsetMap: React.FC<IMap> = (props: IMap) => {
   const [center, setCenter] = useState<[number, number]>([
-    40.712776, -74.005974,
-  ]); // default: new york
+    KITCHENER[0], KITCHENER[1]
+  ]); // default: kitchener
 
   const CenterMapOnMarker = ({ position }: { position: [number, number] }) => {
     const map = useMap();
 
     useEffect(() => {
       if (position) {
-        map.flyTo(position, 5, { duration: 0.5, easeLinearity: 0.8 });
+        map.flyTo(position, DEFAULT_ZOOM, { duration: 0.5, easeLinearity: 0.8 });
       }
     }, [map, position]);
 
@@ -132,7 +130,7 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
     <Container>
       <MapBox
         center={center}
-        zoom={13}
+        zoom={DEFAULT_ZOOM}
         minZoom={3}
         maxBounds={bounds}
         maxBoundsViscosity={1.0}
@@ -147,8 +145,8 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
               <GlowMarker
                 key={index}
                 center={[
-                  sunset.sunsetLocationCoords.lat + randomDistance(),
-                  sunset.sunsetLocationCoords.lng + randomDistance(),
+                  sunset.sunsetLocationCoords.lat,
+                  sunset.sunsetLocationCoords.lng,
                 ]}
                 radius={5}
                 eventHandlers={{

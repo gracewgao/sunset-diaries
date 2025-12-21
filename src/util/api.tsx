@@ -1,5 +1,6 @@
-const API_URL =
-  "https://szkvjn0so9.execute-api.us-east-1.amazonaws.com/sunsets/all";
+import { API_URL } from "../constants/constants";
+
+const GET_SUNSETS_URL = `${API_URL}/sunsets/all`;
 
 interface DynamoDBAttribute<T> {
   S?: string; // string type in DynamoDB
@@ -17,6 +18,8 @@ interface ApiSunsetItem {
   sunset_timestamp: DynamoDBAttribute<string>;
   sunset_url: DynamoDBAttribute<string>;
   user_name: DynamoDBAttribute<string>;
+  approved: DynamoDBAttribute<string>;
+  upload_timestamp: DynamoDBAttribute<string>;
 }
 
 export interface ApiResponse {
@@ -28,6 +31,12 @@ export interface Location {
   lng: number;
 }
 
+export enum Status {
+  APPROVED = "APPROVED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
+};
+
 // friendly interface for sunset item
 export interface SunsetItem {
   sunsetCaption: string;
@@ -37,12 +46,14 @@ export interface SunsetItem {
   sunsetTimestamp: number;
   sunsetUrl: string;
   userName: string;
+  approved: string;
+  uploadTimestamp: number;
   index: number;
 }
 
-export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
+export const getDisplaySunsets = async (payload?: object): Promise<SunsetItem[]> => {
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(GET_SUNSETS_URL, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -66,6 +77,8 @@ export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
         sunsetTimestamp: parseInt(item.sunset_timestamp.N!!, 10),
         sunsetUrl: item.sunset_url.S ?? "",
         userName: item.user_name.S ?? "",
+        approved: item.approved.S ?? "",
+        uploadTimestamp: parseInt(item.upload_timestamp.N!!, 10),
         index: -1, // assign after sorting
       }));
       sunsets.sort(
@@ -76,11 +89,59 @@ export const invokeLambda = async (payload?: object): Promise<SunsetItem[]> => {
       });
       return sunsets;
     } catch (error) {
-      console.error("Error parsing response:", error);
+      console.error("error parsing response:", error);
       throw error;
     }
   } catch (error) {
-    console.error("Error invoking Lambda:", error);
+    console.error("error invoking Lambda:", error);
+    throw error;
+  }
+};
+
+export const getAdminSunsets = async (accessCode: string): Promise<SunsetItem[]> => {
+  try {
+    const response = await fetch(GET_SUNSETS_URL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Code": accessCode,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`error! status: ${response.status}`);
+    }
+
+    const result: ApiResponse = await response.json();
+    try {
+      const posts: SunsetItem[] = result.items.map((item) => ({
+        sunsetCaption: item.sunset_caption.S ?? "",
+        sunsetId: item.sunset_id.S!!,
+        sunsetLocationCoords: {
+          lat: parseFloat(item.sunset_location_coords.M!!.lat.N!!),
+          lng: parseFloat(item.sunset_location_coords.M!!.lng.N!!),
+        },
+        sunsetLocationName: item.sunset_location_name.S ?? "",
+        sunsetTimestamp: parseInt(item.sunset_timestamp.N!!, 10),
+        sunsetUrl: item.sunset_url.S ?? "",
+        userName: item.user_name.S ?? "",
+        index: -1, // assign after sorting
+        approved: item.approved.S ?? "",
+        uploadTimestamp: parseInt(item.upload_timestamp.N!!, 10),
+      }));
+      posts.sort(
+        (a, b) => a.uploadTimestamp - b.uploadTimestamp
+      );
+      posts.forEach((item, index) => {
+        item.index = index;
+      });
+      return posts;
+    } catch (error) {
+      console.error("error parsing response:", error);
+      throw error;
+    }
+  } catch (error) {
+    console.error("error invoking Lambda:", error);
     throw error;
   }
 };

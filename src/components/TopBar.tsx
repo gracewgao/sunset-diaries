@@ -7,6 +7,7 @@ import { IoHeart } from "react-icons/io5";
 import { FaPen } from "react-icons/fa6";
 import { useWindowSize } from "../util/windowSize";
 import Spacer from "./common/Spacer";
+import { Link } from "./common/common";
 
 const LogoSemiCircle = styled(SemiCircle)<{ homepage?: boolean }>`
   fill: inherit;
@@ -48,21 +49,6 @@ const Logo = styled.div<{ homepage?: boolean }>`
       -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
       filter: drop-shadow(0 0 4px ${Color.ORANGE});
       `}
-`;
-
-const Link = styled.a`
-  text-decoration: none;
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:hover {
-    color: ${Color.ORANGE};
-    -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
-    filter: drop-shadow(0 0 4px ${Color.ORANGE});
-  }
 `;
 
 function TopBar(props: { homepage?: boolean }) {

@@ -8,13 +8,13 @@ export const Button = styled.button<{ disabled?: boolean; loading?: boolean }>`
   border: none;
   padding: 0;
   display: inline-block;
-  cursor: pointer;
 
   font-size: 1.5rem;
 
   ${(props) =>
     !props.disabled &&
     `
+    cursor: pointer;
     color: ${Color.YELLOW};
     text-shadow: 0 0 8px ${Color.ORANGE};
 
@@ -123,21 +123,59 @@ export const Checkbox = styled.input`
 export const TextLink = styled.a`
   text-decoration: none;
   cursor: pointer;
-  color: ${Color.WARM_GREY};
+  color: ${Color.YELLOW};
+  text-shadow: 0 0 4px ${Color.ORANGE};
 
   &:hover {
     color: ${Color.ORANGE};
-    text-shadow: 0 0 4px ${Color.ORANGE};
+    text-shadow: 0 0 2px ${Color.ORANGE};
   }
 `;
 
 export const MainText = styled.p`
   color: ${Color.WHITE};
-  
-  a {
-    color: ${Color.WHITE} !important;
-
-    &:hover {
-      color: ${Color.YELLOW} !important;
-    }
 `;
+
+export const Subheading = styled.div`
+  font-size: 1.25rem;
+  color: ${Color.YELLOW};
+  text-shadow: 0 0 4px ${Color.ORANGE};
+  text-transform: lowercase;
+`;
+
+export const SecondarySubheading = styled.div`
+  font-size: 1.5rem;
+  color: ${Color.WARM_GREY};
+  text-transform: lowercase;
+`;
+
+export const Link = styled.a<{ disabled?: boolean }>`
+  text-decoration: none;
+  color: inherit;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ${(props) =>
+    !props.disabled &&
+    `
+    cursor: pointer;
+    &:hover {
+      color: ${Color.ORANGE};
+      -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
+      filter: drop-shadow(0 0 4px ${Color.ORANGE});
+    }
+    `}
+`;
+
+// unix to string date formatter
+export const formatTimestamp = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  return formatter.format(date).toLowerCase();
+};

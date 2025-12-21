@@ -6,6 +6,7 @@ import { SunsetItem } from "../util/api";
 import { useWindowSize } from "../util/windowSize";
 import { IoArrowForward, IoArrowBack } from "react-icons/io5";
 import Spacer from "./common/Spacer";
+import { formatTimestamp } from "./common/common";
 
 const Caption = styled.div`
   text-align: center;
@@ -106,17 +107,6 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
     }
   }, [firstDivRef.current]);
 
-  // unix to string date formatter
-  const formatTimestamp = (timestamp: number) => {
-    const date = new Date(timestamp * 1000);
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-    return formatter.format(date).toLowerCase();
-  };
-
   return (
     <Panel>
       <TopBar homepage />
@@ -133,11 +123,8 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
                 </p>
               )}
               <Metadata>
-                {props.sunset.userName
-                  ? `${props.sunset.userName}'s sunset • `
-                  : ""}
                 {props.sunset.sunsetLocationName
-                  ? ` ${props.sunset.sunsetLocationName} • `
+                  ? ` ${props.sunset.sunsetLocationName}'s sunset • `
                   : ""}
                 {formatTimestamp(props.sunset.sunsetTimestamp)}
               </Metadata>

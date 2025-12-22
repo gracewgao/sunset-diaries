@@ -21,31 +21,15 @@ const SidebarContainer = styled.nav`
 `;
 
 const LogoSemiCircle = styled(SemiCircle)`
-  fill: inherit;
+  fill: ${Color.ORANGE};
+  filter: drop-shadow(0 0 4px ${Color.ORANGE});
 `;
 
-const Logo = styled.div<{ active?: boolean }>`
+const Logo = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
-  fill: ${Color.WARM_GREY};
   margin-bottom: 32px;
-
-  &:hover {
-    color: ${Color.ORANGE};
-    fill: ${Color.ORANGE};
-    -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
-    filter: drop-shadow(0 0 4px ${Color.ORANGE});
-  }
-
-  ${(props) =>
-    props.active &&
-    `
-      color: ${Color.YELLOW};
-      fill: ${Color.YELLOW};
-      -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
-      filter: drop-shadow(0 0 4px ${Color.ORANGE});
-    `}
 `;
 
 const NavLinks = styled.div`
@@ -65,7 +49,6 @@ const NavLink = styled.a<{ active?: boolean }>`
 
   &:hover {
     color: ${Color.ORANGE};
-    -webkit-filter: drop-shadow(0 0 4px ${Color.ORANGE});
     filter: drop-shadow(0 0 4px ${Color.ORANGE});
   }
 
@@ -73,7 +56,7 @@ const NavLink = styled.a<{ active?: boolean }>`
     props.active &&
     `
       color: ${Color.YELLOW};
-      text-shadow: 0 0 4px ${Color.ORANGE};
+      filter: drop-shadow(0 0 4px ${Color.ORANGE});
     `}
 `;
 
@@ -89,7 +72,7 @@ function Sidebar() {
 
   return (
     <SidebarContainer>
-      <Logo onClick={() => navigate("/")} active>
+      <Logo onClick={() => navigate("/")}>
         <LogoSemiCircle width={24} />
       </Logo>
       <NavLinks>

@@ -45,8 +45,9 @@ const Panel = styled.div`
 
   @media (max-width: 768px) {
     max-width: 100%;
-    height: 60%;
+    height: 55%;
     padding: 8px 24px 8px 24px;
+    justify-content: flex-start;
   }
 `;
 
@@ -56,6 +57,8 @@ const ImageContainer = styled.div<{ caption?: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-shrink: 1;
+  min-height: 0;
 `;
 
 const SunsetImage = styled.img`

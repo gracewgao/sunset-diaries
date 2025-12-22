@@ -21,7 +21,7 @@ const TopBar = styled.header<{ isVisible: boolean }>`
 `;
 
 const LogoSemiCircle = styled(SemiCircle)`
-  fill: ${Color.YELLOW};
+  fill: ${Color.ORANGE};
   filter: drop-shadow(0 0 4px ${Color.ORANGE});
 `;
 
@@ -94,7 +94,7 @@ const NavLink = styled.a<{ active?: boolean }>`
     props.active &&
     `
       color: ${Color.YELLOW};
-      text-shadow: 0 0 4px ${Color.ORANGE};
+      filter: drop-shadow(0 0 4px ${Color.ORANGE});
     `}
 `;
 

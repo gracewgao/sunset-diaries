@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.e6e37d0b.css",
-    "main.js": "/static/js/main.ca150fc1.js",
+    "main.js": "/static/js/main.4765cdfd.js",
     "static/js/453.11510133.chunk.js": "/static/js/453.11510133.chunk.js",
     "static/media/waterloo_sunset.jpeg": "/static/media/waterloo_sunset.db4db3c638886816b04d.jpeg",
     "index.html": "/index.html",
     "static/media/logo.svg": "/static/media/logo.da5a46520c7c354777ee669b5ce10c03.svg",
     "main.e6e37d0b.css.map": "/static/css/main.e6e37d0b.css.map",
-    "main.ca150fc1.js.map": "/static/js/main.ca150fc1.js.map",
+    "main.4765cdfd.js.map": "/static/js/main.4765cdfd.js.map",
     "453.11510133.chunk.js.map": "/static/js/453.11510133.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6e37d0b.css",
-    "static/js/main.ca150fc1.js"
+    "static/js/main.4765cdfd.js"
   ]
 }

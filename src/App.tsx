@@ -7,6 +7,7 @@ import { Color } from "./constants/constants";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
 import Admin from "./components/Admin";
+import Search from "./components/Search";
 import Layout from "./components/Layout";
 import Loader from "./components/Loader";
 
@@ -76,6 +77,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<SunsetDiaries />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/new" element={<SunsetForm />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin" element={<Admin />} />

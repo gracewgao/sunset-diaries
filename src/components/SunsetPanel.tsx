@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Color } from "../constants/constants";
 import { SunsetItem } from "../util/api";
-import { useWindowSize } from "../util/windowSize";
 import { IoArrowForward, IoArrowBack } from "react-icons/io5";
 import Spacer from "./common/Spacer";
 import { formatTimestamp } from "./common/common";
@@ -12,6 +11,20 @@ const Caption = styled.div`
   max-width: 400px;
   flex: 0;
   box-sizing: border-box;
+  
+
+  @media (max-width: 768px) {
+  margin: 8px 0px;
+    font-size: 0.9rem;
+  }
+`;
+
+const CaptionText = styled.p`
+  @media (max-width: 768px) {
+    margin: 0;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+  }
 `;
 
 const Panel = styled.div`
@@ -33,6 +46,7 @@ const Panel = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
     height: 60%;
+    padding: 8px 24px 8px 24px;
   }
 `;
 
@@ -52,7 +66,12 @@ const SunsetImage = styled.img`
   border-radius: 10px;
 `;
 
-const Metadata = styled.p``;
+const Metadata = styled.p`
+  @media (max-width: 768px) {
+    margin: 8px 0;
+    font-size: 0.9rem;
+  }
+`;
 
 const Arrow = styled.button`
   background-color: transparent;
@@ -73,8 +92,6 @@ interface ISunsetPanel {
 }
 
 const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
-  const { isMobile } = useWindowSize();
-
   const firstDivRef = useRef<HTMLDivElement | null>(null);
   const [captionHeight, setCaptionHeight] = useState<number>(0);
 
@@ -102,10 +119,10 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
             <SunsetImage src={props.sunset.sunsetUrl} />
           </ImageContainer>
           <Caption ref={firstDivRef}>
-            {isMobile ? null : (
-              <p>
+            {props.sunset.sunsetCaption && (
+              <CaptionText>
                 <i>{props.sunset.sunsetCaption}</i>
-              </p>
+              </CaptionText>
             )}
             <Metadata>
               {props.sunset.userName
@@ -118,8 +135,7 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
             </Metadata>
             <Arrow
               onClick={() => {
-                if (props.sunset)
-                  props.setSunsetIndex(props.sunset.index - 1);
+                if (props.sunset) props.setSunsetIndex(props.sunset.index - 1);
               }}
             >
               <IoArrowBack size={18} />
@@ -127,8 +143,7 @@ const SunsetPanel: React.FC<ISunsetPanel> = (props: ISunsetPanel) => {
             <Spacer width={1} />
             <Arrow
               onClick={() => {
-                if (props.sunset)
-                  props.setSunsetIndex(props.sunset.index + 1);
+                if (props.sunset) props.setSunsetIndex(props.sunset.index + 1);
               }}
             >
               <IoArrowForward size={18} />

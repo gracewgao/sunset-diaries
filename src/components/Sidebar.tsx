@@ -2,8 +2,7 @@ import { styled } from "styled-components";
 import { ReactComponent as SemiCircle } from "../assets/logo.svg";
 import { Color } from "../constants/constants";
 import { useNavigate, useLocation } from "react-router-dom";
-import { IoHeart, IoSearch, IoImages } from "react-icons/io5";
-import { FaPen } from "react-icons/fa6";
+import { IoHeart, IoSearch, IoImages, IoCamera } from "react-icons/io5";
 
 const SidebarContainer = styled.nav`
   width: 160px;
@@ -107,7 +106,7 @@ function Sidebar() {
           about
         </NavLink>
         <NavLink onClick={() => navigate("/new")} active={isActive("/new")}>
-          <FaPen size={18} />
+          <IoCamera size={18} />
           add sunset
         </NavLink>
       </NavLinks>

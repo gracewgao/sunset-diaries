@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import "leaflet/dist/leaflet.css";
 import SunsetMap from "./Map";
@@ -26,8 +26,13 @@ const Row = styled.div`
 
 const SESSION_KEY = "sunset_diaries_current_index";
 
+interface LocationState {
+  sunsetIndex?: number;
+}
+
 function SunsetDiaries() {
-  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const locationState = location.state as LocationState | null;
   const [sunsets, setSunsets] = useState<SunsetItem[]>();
   const [selectedSunset, setSelectedSunset] = useState<SunsetItem>();
   const [sunsetIndex, setSunsetIndex] = useState<number>(() => {
@@ -45,12 +50,11 @@ function SunsetDiaries() {
         if (response.length > 0 && !initialized) {
           setInitialized(true);
 
-          const indexParam = searchParams.get("index");
-          if (indexParam !== null) {
-            const parsedIndex = parseInt(indexParam, 10);
-            if (!isNaN(parsedIndex) && parsedIndex >= 0 && parsedIndex < response.length) {
-              setSunsetIndex(parsedIndex);
-              sessionStorage.setItem(SESSION_KEY, parsedIndex.toString());
+          if (locationState?.sunsetIndex !== undefined) {
+            const idx = locationState.sunsetIndex;
+            if (idx >= 0 && idx < response.length) {
+              setSunsetIndex(idx);
+              sessionStorage.setItem(SESSION_KEY, idx.toString());
               return;
             }
           }
@@ -76,17 +80,16 @@ function SunsetDiaries() {
   }, []);
 
   useEffect(() => {
-    if (!sunsets || sunsets.length === 0) return;
+    if (!sunsets || sunsets.length === 0 || !initialized) return;
     
-    const indexParam = searchParams.get("index");
-    if (indexParam !== null) {
-      const parsedIndex = parseInt(indexParam, 10);
-      if (!isNaN(parsedIndex) && parsedIndex >= 0 && parsedIndex < sunsets.length) {
-        setSunsetIndex(parsedIndex);
-        sessionStorage.setItem(SESSION_KEY, parsedIndex.toString());
+    if (locationState?.sunsetIndex !== undefined) {
+      const idx = locationState.sunsetIndex;
+      if (idx >= 0 && idx < sunsets.length && idx !== sunsetIndex) {
+        setSunsetIndex(idx);
+        sessionStorage.setItem(SESSION_KEY, idx.toString());
       }
     }
-  }, [searchParams]);
+  }, [locationState]);
 
   useEffect(() => {
     if (sunsets && sunsets.length > 0) {

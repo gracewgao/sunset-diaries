@@ -9,6 +9,12 @@ const LayoutContainer = styled.div`
   min-height: 100vh;
 `;
 
+const MobileLayoutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 const SidebarSpace = styled.div`
   width: 160px;
   min-width: 160px;
@@ -18,10 +24,11 @@ const SidebarSpace = styled.div`
 const MainContent = styled.main`
   flex: 1;
   min-height: 100vh;
+`;
 
-  @media (max-width: 768px) {
-    min-height: calc(100vh - 56px);
-  }
+const MobileMainContent = styled.main`
+  flex: 1;
+  min-height: 0;
 `;
 
 interface LayoutProps {
@@ -33,10 +40,10 @@ function Layout({ children }: LayoutProps) {
 
   if (isMobile) {
     return (
-      <>
+      <MobileLayoutContainer>
         <MobileNav />
-        <MainContent>{children}</MainContent>
-      </>
+        <MobileMainContent>{children}</MobileMainContent>
+      </MobileLayoutContainer>
     );
   }
 

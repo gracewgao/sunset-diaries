@@ -27,12 +27,12 @@ const GlobalStyle = createGlobalStyle`
     font-size: clamp(14px, 2vw, 14px);
   }
 
-  html, body {
+  html, body, #root {
     height: 100%;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    }
+  }
 
 .active {
     opacity: 1;

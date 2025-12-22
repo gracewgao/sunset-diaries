@@ -1,16 +1,19 @@
 import { styled } from "styled-components";
 import { SunsetItem } from "../../util/api";
 import SunsetCard from "./SunsetCard";
+import { useWindowSize } from "../../util/windowSize";
 
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   align-items: start;
+`;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+const SingleColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 `;
 
 const Column = styled.div`
@@ -24,6 +27,18 @@ interface SunsetGridProps {
 }
 
 function SunsetGrid({ sunsets }: SunsetGridProps) {
+  const { isMobile } = useWindowSize();
+
+  if (isMobile) {
+    return (
+      <SingleColumn>
+        {sunsets.map((sunset) => (
+          <SunsetCard key={sunset.sunsetId} sunset={sunset} />
+        ))}
+      </SingleColumn>
+    );
+  }
+
   const leftColumn: SunsetItem[] = [];
   const rightColumn: SunsetItem[] = [];
 
@@ -52,4 +67,3 @@ function SunsetGrid({ sunsets }: SunsetGridProps) {
 }
 
 export default SunsetGrid;
-

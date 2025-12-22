@@ -11,7 +11,7 @@ const Page = styled.div`
   width: 100%;
 
   @media (max-width: 768px) {
-    height: calc(100vh - 56px);
+    height: 100%;
   }
 `;
 

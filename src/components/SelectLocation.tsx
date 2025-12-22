@@ -27,6 +27,8 @@ const MapBox = styled(MapContainer)`
 
 const Container = styled.div`
   width: 100%;
+  position: relative;
+  z-index: 1;
 
   .leaflet-control-zoom {
     border: none;

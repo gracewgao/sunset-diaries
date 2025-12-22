@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL, Color } from "../constants/constants";
 import Spacer from "./common/Spacer";
-import TopBar from "./TopBar";
 import {
   BsCheckCircle,
   BsCheckCircleFill,
@@ -132,7 +131,7 @@ const Admin: React.FC = () => {
         }
       );
       setMessage(`submission ${item.index} marked as ${status}`);
-      fetchData(); // refresh data after updating
+      fetchData();
     } catch (error) {
       console.error("error updating status:", error);
       setMessage("failed to update status");
@@ -152,80 +151,77 @@ const Admin: React.FC = () => {
   }, [accessCode]);
 
   return (
-    <>
-      <TopBar />
-      <Container>
-        <GlowingText>admin</GlowingText>
-        <p>
-          this admin panel is used to review submissions to sunset diaries!
-        </p>
-        <Spacer height={2} />
-        <TextLabel required>access code</TextLabel>
-        <Spacer height={0.5} />
-        <TextInput
-          value={accessCode}
-          type="text"
-          placeholder=""
-          onChange={handleAccessCodeChange}
-        />
-        <Spacer height={1.5} />
-        <Button
-          onClick={handleGetSunsets}
-          disabled={!complete}
-          loading={loading}
-        >
-          {loading ? "loading..." : "get submissions"}
-        </Button>
-        <p>{message}</p>
-        <p>{response}</p>
-        <Spacer height={1.5} />
-        <Toggle heading={`pending (${pending.length})`}>
-          {pending.map((item, i) => (
-            <>
-              <ReviewItem
-                key={item.sunsetId}
-                updateApprovalStatus={updateApprovalStatus}
-                item={item}
-                complete={complete}
-              />
-              {i != pending.length - 1 ? <Spacer height={1} /> : null}
-            </>
-          ))}
-          {pending.length === 0 ? "no pending submissions" : null}
-        </Toggle>
-        <Spacer height={1} />
-        <Toggle heading={`approved (${approved.length})`}>
-          {approved.map((item, i) => (
-            <>
-              <ReviewItem
-                key={item.sunsetId}
-                updateApprovalStatus={updateApprovalStatus}
-                item={item}
-                complete={complete}
-              />
-              {i != approved.length - 1 ? <Spacer height={1} /> : null}
-            </>
-          ))}
-          {approved.length === 0 ? "no approved submissions" : null}
-        </Toggle>
-        <Spacer height={1} />
-        <Toggle heading={`rejected (${rejected.length})`}>
-          {rejected.map((item, i) => (
-            <>
-              <ReviewItem
-                key={item.sunsetId}
-                updateApprovalStatus={updateApprovalStatus}
-                item={item}
-                complete={complete}
-              />
-              {i != rejected.length - 1 ? <Spacer height={1} /> : null}
-            </>
-          ))}
-          {rejected.length === 0 ? "no rejected submissions" : null}
-        </Toggle>
-        <Spacer height={2} />
-      </Container>
-    </>
+    <Container>
+      <GlowingText>admin</GlowingText>
+      <p>
+        this admin panel is used to review submissions to sunset diaries!
+      </p>
+      <Spacer height={2} />
+      <TextLabel required>access code</TextLabel>
+      <Spacer height={0.5} />
+      <TextInput
+        value={accessCode}
+        type="text"
+        placeholder=""
+        onChange={handleAccessCodeChange}
+      />
+      <Spacer height={1.5} />
+      <Button
+        onClick={handleGetSunsets}
+        disabled={!complete}
+        loading={loading}
+      >
+        {loading ? "loading..." : "get submissions"}
+      </Button>
+      <p>{message}</p>
+      <p>{response}</p>
+      <Spacer height={1.5} />
+      <Toggle heading={`pending (${pending.length})`}>
+        {pending.map((item, i) => (
+          <>
+            <ReviewItem
+              key={item.sunsetId}
+              updateApprovalStatus={updateApprovalStatus}
+              item={item}
+              complete={complete}
+            />
+            {i != pending.length - 1 ? <Spacer height={1} /> : null}
+          </>
+        ))}
+        {pending.length === 0 ? "no pending submissions" : null}
+      </Toggle>
+      <Spacer height={1} />
+      <Toggle heading={`approved (${approved.length})`}>
+        {approved.map((item, i) => (
+          <>
+            <ReviewItem
+              key={item.sunsetId}
+              updateApprovalStatus={updateApprovalStatus}
+              item={item}
+              complete={complete}
+            />
+            {i != approved.length - 1 ? <Spacer height={1} /> : null}
+          </>
+        ))}
+        {approved.length === 0 ? "no approved submissions" : null}
+      </Toggle>
+      <Spacer height={1} />
+      <Toggle heading={`rejected (${rejected.length})`}>
+        {rejected.map((item, i) => (
+          <>
+            <ReviewItem
+              key={item.sunsetId}
+              updateApprovalStatus={updateApprovalStatus}
+              item={item}
+              complete={complete}
+            />
+            {i != rejected.length - 1 ? <Spacer height={1} /> : null}
+          </>
+        ))}
+        {rejected.length === 0 ? "no rejected submissions" : null}
+      </Toggle>
+      <Spacer height={2} />
+    </Container>
   );
 };
 

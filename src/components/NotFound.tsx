@@ -1,21 +1,12 @@
 import React from "react";
-import TopBar from "./TopBar";
-import { Container, GlowingText, MainText, TextLink } from "./common/common";
-import { useNavigate } from "react-router-dom";
+import { Container, GlowingText, MainText } from "./common/common";
 
 const NotFound: React.FC = () => {
-  const navigate = useNavigate();
   return (
-    <>
-      <TopBar />
-      <Container>
-        <GlowingText>404</GlowingText>
-        <MainText>oops! no sunsets here...</MainText>
-        <TextLink noStyle onClick={() => navigate("/")}>
-          return to homepage
-        </TextLink>
-      </Container>
-    </>
+    <Container>
+      <GlowingText>404</GlowingText>
+      <MainText>sorry, this page doesn't exist!</MainText>
+    </Container>
   );
 };
 

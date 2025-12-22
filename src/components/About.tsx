@@ -1,11 +1,8 @@
 import React from "react";
-import TopBar from "./TopBar";
 import {
-  Button,
   Container,
   GlowingText,
   MainText,
-  Subheading,
   TextLink,
 } from "./common/common";
 import { styled } from "styled-components";
@@ -20,33 +17,30 @@ const SunsetImage = styled.img`
 
 const About: React.FC = () => {
   return (
-    <>
-      <TopBar />
-      <Container>
-        <GlowingText>dear sunset diaries,</GlowingText>
-        <MainText>
-          I used to have beautiful west-facing windows in college and saw the
-          most magical sunsets from my room. this project is for remembering all
-          the pretty skies I come across and the days that come between them.
-        </MainText>
-        <MainText>
-          if you also have sunset diaries to share, please feel free to
-          contribute! please be nice and post responsibly.
-        </MainText>
-        <p>
-          {"made with <3 by "}
-          <TextLink noStyle href="https://gracewgao.me/">grace</TextLink>
-        </p>
-        <Spacer height={0.5} />
-        <SunsetImage src={WaterlooSunset} />
-        <p>
-          ps. nothing beats a{" "}
-          <TextLink noStyle href="https://open.spotify.com/track/3G0EALIIp5DAeIERxXBHmo?si=edcb03fde50e4fa2">
-            waterloo sunset
-          </TextLink>
-        </p>
-      </Container>
-    </>
+    <Container>
+      <GlowingText>dear sunset diaries,</GlowingText>
+      <MainText>
+        I used to have beautiful west-facing windows in college and saw the
+        most magical sunsets from my room. this project is for remembering all
+        the pretty skies I come across and the days that come between them.
+      </MainText>
+      <MainText>
+        if you also have sunset diaries to share, please feel free to
+        contribute! please be nice and post responsibly.
+      </MainText>
+      <p>
+        {"made with <3 by "}
+        <TextLink noStyle href="https://gracewgao.me/">grace</TextLink>
+      </p>
+      <Spacer height={0.5} />
+      <SunsetImage src={WaterlooSunset} />
+      <p>
+        ps. nothing beats a{" "}
+        <TextLink noStyle href="https://open.spotify.com/track/3G0EALIIp5DAeIERxXBHmo?si=edcb03fde50e4fa2">
+          waterloo sunset
+        </TextLink>
+      </p>
+    </Container>
   );
 };
 

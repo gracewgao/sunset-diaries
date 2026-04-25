@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { ReactComponent as SemiCircle } from "../assets/logo.svg";
 import { Color } from "../constants/constants";
 import { useNavigate, useLocation } from "react-router-dom";
-import { IoHeart, IoSearch, IoImages, IoMenu, IoClose, IoCamera } from "react-icons/io5";
+import { IoHeart, IoImages, IoMenu, IoClose, IoCamera, IoMap } from "react-icons/io5";
 
 const TopBar = styled.header<{ isVisible: boolean }>`
   display: flex;
@@ -163,13 +163,13 @@ function MobileNav() {
           </MenuButton>
         </OverlayHeader>
         <NavLinks>
-          <NavLink onClick={() => handleNavigate("/")} active={isActive("/") && location.pathname === "/"}>
+          <NavLink onClick={() => handleNavigate("/browse")} active={isActive("/browse")}>
             <IoImages size={18} />
             browse
           </NavLink>
-          <NavLink onClick={() => handleNavigate("/search")} active={isActive("/search")}>
-            <IoSearch size={18} />
-            search
+          <NavLink onClick={() => handleNavigate("/map")} active={isActive("/map")}>
+            <IoMap size={18} />
+            map
           </NavLink>
           <NavLink onClick={() => handleNavigate("/about")} active={isActive("/about")}>
             <IoHeart size={18} />

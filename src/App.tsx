@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import SunsetForm from "./components/SunsetForm";
 import SunsetDiaries from "./components/SunsetDiaries";
 import { Color } from "./constants/constants";
@@ -76,8 +76,9 @@ function App() {
       <HashRouter>
         <Layout>
           <Routes>
-            <Route path="/" element={<SunsetDiaries />} />
-            <Route path="/search" element={<Search />} />
+            <Route path="/" element={<Navigate to="/browse" replace />} />
+            <Route path="/browse" element={<Search />} />
+            <Route path="/map" element={<SunsetDiaries />} />
             <Route path="/new" element={<SunsetForm />} />
             <Route path="/about" element={<About />} />
             <Route path="/admin" element={<Admin />} />

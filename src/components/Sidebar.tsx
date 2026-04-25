@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { ReactComponent as SemiCircle } from "../assets/logo.svg";
 import { Color } from "../constants/constants";
 import { useNavigate, useLocation } from "react-router-dom";
-import { IoHeart, IoSearch, IoImages, IoCamera } from "react-icons/io5";
+import { IoHeart, IoCamera, IoMap, IoImages } from "react-icons/io5";
 
 const SidebarContainer = styled.nav`
   width: 160px;
@@ -76,13 +76,13 @@ function Sidebar() {
         <LogoSemiCircle width={24} />
       </Logo>
       <NavLinks>
-        <NavLink onClick={() => navigate("/")} active={isActive("/") && location.pathname === "/"}>
+        <NavLink onClick={() => navigate("/browse")} active={isActive("/browse")}>
           <IoImages size={18} />
           browse
         </NavLink>
-        <NavLink onClick={() => navigate("/search")} active={isActive("/search")}>
-          <IoSearch size={18} />
-          search
+        <NavLink onClick={() => navigate("/map")} active={isActive("/map")}>
+          <IoMap size={18} />
+          map
         </NavLink>
         <NavLink onClick={() => navigate("/about")} active={isActive("/about")}>
           <IoHeart size={18} />

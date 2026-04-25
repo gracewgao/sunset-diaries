@@ -61,7 +61,7 @@ function SunsetCard({ sunset }: SunsetCardProps) {
   metadataParts.push(formatTimestamp(sunset.sunsetTimestamp));
 
   const handleClick = () => {
-    navigate("/", { state: { sunsetIndex: sunset.index } });
+    navigate("/map", { state: { sunsetIndex: sunset.index } });
   };
 
   return (

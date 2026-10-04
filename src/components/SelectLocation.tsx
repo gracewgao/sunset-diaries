@@ -219,7 +219,7 @@ const SelectLocation: React.FC<{
         style={{ height: "500px", width: "100%" }}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={`https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${process.env.REACT_APP_CARTO_API_KEY}`}
           attribution="&copy; OpenStreetMap contributors &copy; CARTO"
         />
         <SearchControl setPosition={setCoords} position={coords} />

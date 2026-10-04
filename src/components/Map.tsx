@@ -138,7 +138,7 @@ const SunsetMap: React.FC<IMap> = (props: IMap) => {
         maxBoundsViscosity={1.0}
       >
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={`https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${process.env.REACT_APP_CARTO_API_KEY}`}
           attribution="&copy; OpenStreetMap contributors &copy; CARTO"
         />
         {props.sunsets.map((sunset, index) =>
